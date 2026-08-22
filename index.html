@@ -645,6 +645,41 @@
       padding: var(--section-top) var(--content-gutter) var(--section-bottom);
       border-top: 1px solid rgba(23,25,26,.09);
       background: rgba(255,255,255,.14);
+      isolation: isolate;
+      overflow: hidden;
+    }
+
+    .about-light-pillar {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      background: #dfe1df;
+      mix-blend-mode: normal;
+      opacity: .64;
+      pointer-events: none;
+    }
+
+    .about-light-pillar canvas {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    #about::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(90deg, rgba(238,240,238,.3), rgba(238,240,238,.54) 52%, rgba(238,240,238,.68));
+      pointer-events: none;
+    }
+
+    #about > .section-shell {
+      position: relative;
+      z-index: 2;
     }
 
     .about-home-layout {
@@ -723,7 +758,7 @@
     body[data-page="intro"] #about {
       min-height: 100vh;
       border-top: 0;
-      background: rgba(238,240,238,.68);
+      background: #dfe1df;
       backdrop-filter: blur(3px) saturate(.76);
     }
 
@@ -2322,6 +2357,14 @@
       body[data-page="intro"] #about .about-portrait,
       body[data-page="intro"] #about .about-copy {
         transform: translate3d(0, var(--about-mobile-y, 56px), 0);
+      }
+
+      .about-light-pillar {
+        opacity: .52;
+      }
+
+      #about::after {
+        background: rgba(238,240,238,.58);
       }
 
       .resume-item {
@@ -4106,6 +4149,7 @@
     </section>
 
     <section class="profile-section" id="about" data-section="about">
+      <div class="about-light-pillar" id="aboutLightPillar" aria-hidden="true"></div>
       <div class="section-shell about-home-layout">
         <figure class="about-portrait">
           <div class="portrait-placeholder" role="img" aria-label="Liu Anjie 肖像照片占位">
@@ -4719,6 +4763,10 @@
   </div>
 
   <script>
+    import('./js/light-pillar.js').catch((error) => {
+      console.error('LightPillar failed to load:', error);
+    });
+
     const progressBar = document.getElementById('progressBar');
     const topNav = document.querySelector('.topnav');
     const navToggle = document.querySelector('.nav-toggle');
