@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Liu Anjie | 全链条设计负责人</title>
   <link rel="icon" href="data:,">
+  <link rel="preload" as="image" href="assets/hero-painted-background.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -331,21 +332,74 @@
       display: none;
       position: absolute;
       inset: 0;
-      z-index: -4;
+      z-index: -2;
       overflow: hidden;
       pointer-events: none;
+      opacity: var(--hero-bg-opacity, 1);
+      transform: translate3d(var(--hero-bg-x, 0px), 0, 0) scale(var(--hero-bg-scale, 1));
+      transform-origin: center center;
+      will-change: transform, opacity;
+    }
+
+    .hero-art-drift {
+      position: absolute;
+      inset: -4%;
+      transform: translate3d(var(--hero-art-x, 0px), var(--hero-art-y, 0px), 0);
+      will-change: transform;
     }
 
     .hero-bg img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center center;
-      filter: saturate(.92) contrast(.96);
-      opacity: var(--hero-bg-opacity, 1);
-      transform: translate3d(var(--hero-bg-x, 0px), 0, 0) scale(var(--hero-bg-scale, 1));
+      object-position: center 48%;
+      filter: saturate(.96) contrast(1.02);
+      animation: heroArtBreath 22s ease-in-out infinite alternate;
       transform-origin: center center;
-      will-change: transform, opacity;
+      will-change: transform;
+    }
+
+    .hero-ripple-surface,
+    .hero-ripple-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .hero-ripple-surface {
+      background:
+        radial-gradient(circle 190px at var(--hero-pointer-x, 50%) var(--hero-pointer-y, 50%), rgba(255,255,255,.2), rgba(200,102,61,.08) 34%, rgba(70,87,67,.06) 52%, transparent 74%);
+      mix-blend-mode: soft-light;
+      opacity: var(--hero-pointer-opacity, 0);
+      transition: opacity .45s ease;
+    }
+
+    .hero-ripple {
+      position: absolute;
+      left: var(--ripple-x);
+      top: var(--ripple-y);
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(255,255,255,.42);
+      border-radius: 50%;
+      box-shadow:
+        0 0 0 1px rgba(112,120,90,.14),
+        0 0 34px rgba(200,102,61,.16);
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(.25);
+      animation: heroRipple 2.5s cubic-bezier(.2,.65,.25,1) forwards;
+    }
+
+    @keyframes heroArtBreath {
+      0% { transform: scale(1.035) translate3d(-.35%, -.2%, 0); }
+      50% { transform: scale(1.06) translate3d(.35%, .25%, 0); }
+      100% { transform: scale(1.045) translate3d(-.15%, .45%, 0); }
+    }
+
+    @keyframes heroRipple {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(.25); }
+      16% { opacity: .58; }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(8.5); }
     }
 
     .hero::before {
@@ -397,6 +451,10 @@
       padding: var(--section-top) var(--content-gutter) var(--section-bottom);
       overflow: hidden;
       isolation: isolate;
+    }
+
+    body[data-page="intro"] .hero-bg {
+      display: block;
     }
 
     body[data-page="intro"] > .molten-field {
@@ -495,9 +553,8 @@
     }
 
     .portfolio-label {
-      --portfolio-word: 0;
       --portfolio-opacity: 1;
-      --portfolio-base-size: clamp(34px, 4.6vw, 78px);
+      --portfolio-base-size: clamp(72px, 9vw, 148px);
       display: grid;
       grid-template-columns: minmax(0, 1fr);
       place-items: center;
@@ -521,12 +578,8 @@
       white-space: nowrap;
     }
 
-    .portfolio-bilingual {
-      opacity: calc(1 - var(--portfolio-word));
-    }
-
     .portfolio-single {
-      opacity: var(--portfolio-word);
+      opacity: 1;
     }
 
     .portfolio-label::after {
@@ -556,10 +609,9 @@
     }
 
     .hero-name {
-      position: absolute;
-      left: 50%;
-      top: clamp(138px, 19vh, 182px);
-      transform: translateX(-50%);
+      position: static;
+      margin-bottom: 18px;
+      transform: none;
       color: rgba(23, 25, 26, .62);
       font-family: var(--display);
       font-size: clamp(13px, 1.1vw, 16px);
@@ -901,7 +953,13 @@
 
     .hero-gateway {
       justify-content: center;
-      margin-top: 34px;
+      margin-top: 36px;
+    }
+
+    .hero-gateway .action-link {
+      flex: 0 0 120px;
+      width: 120px;
+      padding-inline: 12px;
     }
 
     .summary-panel {
@@ -2644,7 +2702,7 @@
       }
 
       .hero-name {
-        top: 108px;
+        margin-bottom: 12px;
         font-size: 12px;
       }
 
@@ -2723,7 +2781,7 @@
       }
 
       .portfolio-label {
-        --portfolio-base-size: clamp(28px, 10vw, 48px);
+        --portfolio-base-size: clamp(46px, 13.7vw, 58px);
       }
 
       .portfolio-label::after {
@@ -4085,22 +4143,18 @@
     }
 
     body[data-page="intro"] {
-      background:
-        radial-gradient(ellipse at 84% 10%, rgba(215,126,61,.92), transparent 43%),
-        radial-gradient(ellipse at 16% 78%, rgba(104,128,98,.94), transparent 56%),
-        linear-gradient(142deg, #d9d7c0 0%, #9eaa90 30%, #52654d 64%, #ad5735 100%);
+      background: #6e684d;
     }
 
     body[data-page="intro"] > .molten-field {
-      opacity: .42;
-      filter: saturate(1.18) contrast(1.18) brightness(.92);
-      mix-blend-mode: normal;
+      display: none;
+      opacity: 0;
     }
 
     body[data-page="intro"] .hero-sticky::before {
       background:
-        linear-gradient(118deg, rgba(244,240,232,.08) 0 20%, rgba(70,87,67,.12) 54%, rgba(200,102,61,.1) 100%),
-        linear-gradient(180deg, rgba(45,55,43,.08), rgba(40,48,37,.28));
+        radial-gradient(circle at 50% 46%, rgba(255,255,255,.06), transparent 38vw),
+        linear-gradient(180deg, rgba(37,37,34,.2), rgba(37,37,34,.35));
     }
 
     body[data-page="intro"] .topnav {
@@ -4112,6 +4166,15 @@
       border-color: var(--burnt-orange);
       background: var(--burnt-orange);
       color: #17130f;
+    }
+
+    body[data-page="intro"] .portfolio-label {
+      text-shadow: 0 5px 34px rgba(37,37,34,.22);
+    }
+
+    body[data-page="intro"] .hero-name {
+      color: rgba(255,255,255,.84);
+      text-shadow: 0 4px 18px rgba(37,37,34,.2);
     }
 
     .about-light-pillar,
@@ -4674,20 +4737,20 @@
 
   <main id="top">
     <section class="hero" id="intro" data-section="intro">
-      <div class="hero-bg" aria-hidden="true">
-        <img src="hero-bg.png" alt="">
-      </div>
       <div class="hero-sticky">
-        <div class="hero-name">Liu Anjie</div>
+        <div class="hero-bg" id="heroArtwork" aria-hidden="true">
+          <div class="hero-art-drift" id="heroArtDrift">
+            <img src="assets/hero-painted-background.jpg" alt="">
+          </div>
+          <div class="hero-ripple-surface"></div>
+          <div class="hero-ripple-layer" id="heroRippleLayer"></div>
+        </div>
         <div class="hero-content">
+          <div class="hero-name">Liu Anjie</div>
           <div class="portfolio-label">
-            <span class="portfolio-bilingual">个人作品集 / PORTFOLIO</span>
-            <span class="portfolio-single" aria-hidden="true">PORTFOLIO</span>
+            <span class="portfolio-single">PORTFOLIO</span>
           </div>
           <div class="hero-details">
-            <div class="hero-role">品牌 × 产品设计 × 电商视觉 / Design Manager</div>
-            <p class="hero-position"><strong>面向产品型跨境品牌的全链条设计负责人</strong>，连接品牌、产品、电商内容与团队管理。</p>
-            <p class="hero-flow">品牌策略 → 产品设计 → CMF → 包装 → Amazon → A+ → 社媒视频 → 团队管理</p>
             <nav class="action-row hero-gateway" aria-label="作品集模块入口">
               <a class="action-link primary" href="#about">关于我</a>
               <a class="action-link" href="#capability">能力地图</a>
@@ -4698,7 +4761,6 @@
             </nav>
           </div>
         </div>
-        <div class="scroll-hint">向下滚动 / Scroll</div>
       </div>
     </section>
 
@@ -5336,6 +5398,9 @@
     const cursorHalo = document.getElementById('cursorHalo');
     const heroSection = document.querySelector('.hero');
     const heroSticky = document.querySelector('.hero-sticky');
+    const heroArtwork = document.getElementById('heroArtwork');
+    const heroArtDrift = document.getElementById('heroArtDrift');
+    const heroRippleLayer = document.getElementById('heroRippleLayer');
     const heroName = document.querySelector('.hero-name');
     const portfolioLabel = document.querySelector('.portfolio-label');
     const heroDetails = document.querySelector('.hero-details');
@@ -5395,6 +5460,15 @@
       startTime: performance.now(),
       lastDraw: 0,
       ready: false
+    };
+    const heroArt = {
+      x: 0,
+      y: 0,
+      targetX: 0,
+      targetY: 0,
+      lastRipple: 0,
+      lastRippleX: -999,
+      lastRippleY: -999
     };
 
     const zoomableImages = Array.from(document.querySelectorAll('main img')).filter((image) => {
@@ -5889,8 +5963,32 @@
         drawFlowField(time);
         flow.lastDraw = time;
       }
+      if (heroArtDrift) {
+        heroArt.x += (heroArt.targetX - heroArt.x) * .065;
+        heroArt.y += (heroArt.targetY - heroArt.y) * .065;
+        heroArtDrift.style.setProperty('--hero-art-x', `${heroArt.x.toFixed(2)}px`);
+        heroArtDrift.style.setProperty('--hero-art-y', `${heroArt.y.toFixed(2)}px`);
+      }
       updateCapabilityOrbits(time);
       requestAnimationFrame(animateFlowField);
+    }
+
+    function createHeroRipple(clientX, clientY, force = false) {
+      if (!heroSticky || !heroRippleLayer || reduceMotionQuery.matches) return;
+      const rect = heroSticky.getBoundingClientRect();
+      if (clientX < rect.left || clientX > rect.right || clientY < rect.top || clientY > rect.bottom) return;
+      const now = performance.now();
+      const distance = Math.hypot(clientX - heroArt.lastRippleX, clientY - heroArt.lastRippleY);
+      if (!force && (now - heroArt.lastRipple < 520 || distance < 72)) return;
+      heroArt.lastRipple = now;
+      heroArt.lastRippleX = clientX;
+      heroArt.lastRippleY = clientY;
+      const ripple = document.createElement('span');
+      ripple.className = 'hero-ripple';
+      ripple.style.setProperty('--ripple-x', `${((clientX - rect.left) / rect.width * 100).toFixed(2)}%`);
+      ripple.style.setProperty('--ripple-y', `${((clientY - rect.top) / rect.height * 100).toFixed(2)}%`);
+      heroRippleLayer.appendChild(ripple);
+      ripple.addEventListener('animationend', () => ripple.remove(), { once: true });
     }
 
     function updateProgress() {
@@ -6044,17 +6142,15 @@
 
       const range = Math.max(1, heroSection.offsetHeight - window.innerHeight);
       const progress = Math.min(1, Math.max(0, (window.scrollY - heroSection.offsetTop) / range));
-      const wordProgress = Math.min(1, Math.max(0, (progress - .07) / .15));
       const detailProgress = Math.min(1, Math.max(0, (progress - .02) / .2));
       const zoomProgress = Math.min(1, Math.max(0, (progress - .24) / .5));
       const fadeProgress = Math.min(1, Math.max(0, (progress - .5) / .27));
       const maxScale = window.innerWidth <= 600 ? 3.25 : 5.4;
       const baseSize = window.innerWidth <= 600
-        ? Math.min(48, Math.max(28, window.innerWidth * .1))
-        : Math.min(78, Math.max(34, window.innerWidth * .046));
+        ? Math.min(58, Math.max(46, window.innerWidth * .137))
+        : Math.min(148, Math.max(72, window.innerWidth * .09));
       const displaySize = baseSize * (1 + zoomProgress * (maxScale - 1));
 
-      portfolioLabel.style.setProperty('--portfolio-word', wordProgress.toFixed(3));
       portfolioLabel.style.setProperty('--portfolio-font-size', `${displaySize.toFixed(2)}px`);
       portfolioLabel.style.setProperty('--portfolio-opacity', (1 - fadeProgress).toFixed(3));
       if (heroDetails) {
@@ -6183,6 +6279,27 @@
     });
 
     if (finePointerQuery.matches && !reduceMotionQuery.matches) {
+      if (heroSticky && heroArtwork) {
+        heroSticky.addEventListener('pointermove', (event) => {
+          if (document.body.dataset.page !== 'intro') return;
+          const rect = heroSticky.getBoundingClientRect();
+          const px = clamp((event.clientX - rect.left) / rect.width, 0, 1);
+          const py = clamp((event.clientY - rect.top) / rect.height, 0, 1);
+          heroArt.targetX = (px - .5) * -20;
+          heroArt.targetY = (py - .5) * -14;
+          heroArtwork.style.setProperty('--hero-pointer-x', `${(px * 100).toFixed(2)}%`);
+          heroArtwork.style.setProperty('--hero-pointer-y', `${(py * 100).toFixed(2)}%`);
+          heroArtwork.style.setProperty('--hero-pointer-opacity', '1');
+          createHeroRipple(event.clientX, event.clientY);
+        }, { passive: true });
+
+        heroSticky.addEventListener('pointerleave', () => {
+          heroArt.targetX = 0;
+          heroArt.targetY = 0;
+          heroArtwork.style.setProperty('--hero-pointer-opacity', '0');
+        });
+      }
+
       projectShots.forEach((shot) => {
         shot.addEventListener('pointermove', (event) => {
           const rect = shot.getBoundingClientRect();
@@ -6197,6 +6314,12 @@
           shot.style.setProperty('--tilt-y', '0deg');
         });
       });
+    }
+
+    if (heroSticky) {
+      heroSticky.addEventListener('pointerdown', (event) => {
+        if (document.body.dataset.page === 'intro') createHeroRipple(event.clientX, event.clientY, true);
+      }, { passive: true });
     }
 
     zoomableImages.forEach((image) => {
