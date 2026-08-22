@@ -6,7 +6,7 @@ const container = document.getElementById('aboutLightPillar');
 
 const options = {
   topColor: '#ffffff',
-  bottomColor: '#7389af',
+  bottomColor: '#c8663d',
   intensity: 1,
   rotationSpeed: 0.6,
   glowAmount: 0.001,
