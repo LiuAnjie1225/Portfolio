@@ -707,7 +707,7 @@
       overflow: hidden;
     }
 
-    .about-light-pillar {
+    .about-silk {
       position: absolute;
       inset: 0;
       z-index: 0;
@@ -718,12 +718,12 @@
       pointer-events: none;
     }
 
-    .about-light-pillar canvas {
-      position: absolute;
-      inset: 0;
+    .about-silk canvas {
+      position: sticky;
+      top: 0;
       display: block;
-      width: 100%;
-      height: 100%;
+      width: 100% !important;
+      height: 100vh !important;
     }
 
     #about::after {
@@ -814,10 +814,38 @@
     }
 
     body[data-page="intro"] #about {
-      min-height: 100vh;
+      min-height: 280vh;
+      padding: 0;
       border-top: 0;
       background: #111314;
-      backdrop-filter: blur(3px) saturate(.76);
+      backdrop-filter: none;
+      overflow: clip;
+    }
+
+    body[data-page="intro"] #about > .about-silk {
+      position: sticky;
+      top: 0;
+      inset-inline: 0;
+      width: 100%;
+      height: 100vh;
+      margin-bottom: -100vh;
+      overflow: hidden;
+    }
+
+    body[data-page="intro"] #about > .about-silk canvas {
+      position: absolute;
+      inset: 0;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    body[data-page="intro"] #about > .about-home-layout {
+      position: sticky;
+      top: 0;
+      width: min(1320px, calc(100% - (var(--content-gutter) * 2)));
+      height: 100vh;
+      min-height: 100svh;
+      padding: var(--section-top) 0 var(--section-bottom);
     }
 
     body[data-page="intro"] #about .about-portrait,
@@ -832,7 +860,12 @@
     }
 
     body[data-page="intro"] #about .about-copy {
-      transform: translate3d(var(--about-copy-x, 90px), 0, 0);
+      opacity: 1;
+      transform: none;
+    }
+
+    body[data-page="intro"] #about .about-scroll-step {
+      will-change: opacity, transform, filter;
     }
 
     .section-shell {
@@ -2480,7 +2513,7 @@
         transform: translate3d(0, var(--about-mobile-y, 56px), 0);
       }
 
-      .about-light-pillar {
+      .about-silk {
         opacity: .82;
       }
 
@@ -4177,45 +4210,42 @@
       text-shadow: 0 4px 18px rgba(37,37,34,.2);
     }
 
-    .about-light-pillar,
+    .about-silk,
     body[data-page="intro"] #about,
     #about {
-      background:
-        radial-gradient(ellipse at 82% 18%, rgba(200,102,61,.28), transparent 42%),
-        radial-gradient(ellipse at 12% 82%, rgba(112,120,90,.44), transparent 52%),
-        linear-gradient(134deg, #f4f0e8 0 24%, #b7bea6 58%, #d18a67 100%);
+      background: #3d3b23;
     }
 
-    .about-light-pillar {
-      opacity: .86;
+    .about-silk {
+      opacity: 1;
     }
 
     #about {
-      border-top-color: rgba(93,78,60,.14);
-      color: var(--charcoal);
+      border-top-color: rgba(244,240,232,.12);
+      color: var(--warm-ivory);
     }
 
     #about::after {
       background:
-        linear-gradient(90deg, rgba(244,240,232,.42), rgba(244,240,232,.05) 50%, rgba(200,102,61,.1)),
-        linear-gradient(150deg, transparent 0 48%, rgba(70,87,67,.1) 72%, rgba(200,102,61,.08));
+        radial-gradient(circle at 72% 42%, rgba(200,102,61,.1), transparent 38vw),
+        linear-gradient(90deg, rgba(25,25,16,.52), rgba(37,37,22,.14) 48%, rgba(25,25,16,.38));
     }
 
     #about .eyebrow {
-      color: var(--olive);
+      color: rgba(244,240,232,.68);
     }
 
     #about .about-portrait figcaption,
     #about .quote-line,
     #about .summary-cell p {
-      color: var(--text);
+      color: rgba(244,240,232,.72);
     }
 
     #about .role-chip,
     #about .tag-cloud span {
-      border-color: rgba(112,120,90,.22);
-      background: rgba(216,201,181,.28);
-      color: #5d654a;
+      border-color: rgba(244,240,232,.18);
+      background: rgba(20,20,12,.24);
+      color: rgba(244,240,232,.84);
     }
 
     #about .action-link.primary {
@@ -4225,28 +4255,28 @@
     }
 
     #about .action-link:not(.primary) {
-      border-color: rgba(93,78,60,.18);
-      background: rgba(251,248,241,.58);
-      color: var(--charcoal);
+      border-color: rgba(244,240,232,.2);
+      background: rgba(20,20,12,.3);
+      color: var(--warm-ivory);
     }
 
     #about .summary-panel {
-      border-color: rgba(93,78,60,.16);
-      background: rgba(251,248,241,.56);
-      box-shadow: 0 24px 70px rgba(75,59,43,.12);
+      border-color: rgba(244,240,232,.16);
+      background: rgba(20,20,12,.34);
+      box-shadow: 0 24px 70px rgba(12,12,8,.24);
     }
 
     #about .summary-panel b {
-      color: var(--charcoal);
+      color: var(--warm-ivory);
     }
 
     #about .summary-cell {
-      border-color: rgba(112,120,90,.18);
-      background: rgba(216,201,181,.22);
+      border-color: rgba(244,240,232,.12);
+      background: rgba(244,240,232,.055);
     }
 
     #about .summary-cell small {
-      color: var(--muted);
+      color: rgba(244,240,232,.5);
     }
 
     .portrait-placeholder {
@@ -4500,12 +4530,47 @@
     }
 
     @media (max-width: 820px) {
-      #about::after {
-        background: rgba(244,240,232,.24);
+      body[data-page="intro"] #about {
+        min-height: auto;
+        padding: var(--section-top) var(--side-pad) var(--section-bottom);
       }
 
-      .about-light-pillar {
-        opacity: .72;
+      body[data-page="intro"] #about > .about-home-layout {
+        position: relative;
+        top: auto;
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        padding: 0;
+      }
+
+      body[data-page="intro"] #about .about-copy {
+        opacity: 1;
+        transform: none;
+      }
+
+      body[data-page="intro"] #about .about-scroll-step {
+        opacity: 0;
+        filter: blur(8px);
+        transform: translate3d(0, 42px, 0);
+        transition:
+          opacity .85s cubic-bezier(.16,1,.3,1),
+          transform .95s cubic-bezier(.16,1,.3,1),
+          filter .85s ease;
+      }
+
+      body[data-page="intro"] #about .about-scroll-step.is-about-visible {
+        opacity: 1;
+        filter: none;
+        transform: none;
+      }
+
+      #about::after {
+        background: rgba(25,25,16,.42);
+      }
+
+      .about-silk {
+        opacity: .9;
       }
 
       .topnav {
@@ -4518,6 +4583,36 @@
 
       .management-home-layout {
         background: linear-gradient(155deg, #ded1be 0 22%, #93a07e 62%, #c97a54 100%);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      body[data-page="intro"] #about {
+        min-height: 100vh;
+        padding: var(--section-top) var(--content-gutter) var(--section-bottom);
+      }
+
+      body[data-page="intro"] #about > .about-silk {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+      }
+
+      body[data-page="intro"] #about > .about-home-layout {
+        position: relative;
+        top: auto;
+        width: min(1320px, 100%);
+        height: auto;
+        min-height: calc(100vh - var(--section-top) - var(--section-bottom));
+        padding: 0;
+      }
+
+      body[data-page="intro"] #about .about-scroll-step {
+        opacity: 1;
+        filter: none;
+        transform: none;
       }
     }
 
@@ -4765,7 +4860,7 @@
     </section>
 
     <section class="profile-section" id="about" data-section="about">
-      <div class="about-light-pillar" id="aboutLightPillar" aria-hidden="true"></div>
+      <div class="about-silk" id="aboutSilk" aria-hidden="true"></div>
       <div class="section-shell about-home-layout">
         <figure class="about-portrait">
           <div class="portrait-placeholder" role="img" aria-label="Liu Anjie 肖像照片占位">
@@ -5379,8 +5474,8 @@
   </div>
 
   <script>
-    import('./js/light-pillar.js').catch((error) => {
-      console.error('LightPillar failed to load:', error);
+    import('./js/silk.js').catch((error) => {
+      console.error('Silk failed to load:', error);
     });
 
     const progressBar = document.getElementById('progressBar');
@@ -5406,6 +5501,17 @@
     const heroDetails = document.querySelector('.hero-details');
     const scrollHint = document.querySelector('.scroll-hint');
     const homeAbout = document.getElementById('about');
+    const homeAboutCopy = document.querySelector('#about .about-copy');
+    const aboutScrollSteps = [
+      document.querySelector('#about .about-portrait'),
+      document.querySelector('#about .eyebrow'),
+      document.querySelector('#about .role-chip'),
+      document.querySelector('#about .intro-block h2'),
+      document.querySelector('#about .quote-line'),
+      document.querySelector('#about .tag-cloud'),
+      document.querySelector('#about .intro-block > .action-row'),
+      document.querySelector('#about .summary-panel')
+    ].filter(Boolean);
     const homeStorySections = Array.from(document.querySelectorAll('[data-home-story]'));
     const chainStory = document.querySelector('[data-home-story="chain"]');
     const chainNodes = Array.from(document.querySelectorAll('.chain-node'));
@@ -5470,6 +5576,8 @@
       lastRippleX: -999,
       lastRippleY: -999
     };
+
+    aboutScrollSteps.forEach((step) => step.classList.add('about-scroll-step'));
 
     const zoomableImages = Array.from(document.querySelectorAll('main img')).filter((image) => {
       return image.getAttribute('alt')?.trim() && !image.closest('[data-no-viewer]');
@@ -6131,12 +6239,12 @@
           heroDetails.style.setProperty('--hero-details-opacity', '1');
           heroDetails.style.setProperty('--hero-details-y', '0px');
         }
-        if (homeAbout) {
-          homeAbout.style.setProperty('--about-reveal', '1');
-          homeAbout.style.setProperty('--about-portrait-x', '0px');
-          homeAbout.style.setProperty('--about-copy-x', '0px');
-          homeAbout.style.setProperty('--about-mobile-y', '0px');
-        }
+        aboutScrollSteps.forEach((step) => {
+          step.style.opacity = '1';
+          step.style.transform = 'none';
+          step.style.filter = 'none';
+        });
+        if (homeAboutCopy) homeAboutCopy.style.transform = 'none';
         return;
       }
 
@@ -6161,15 +6269,34 @@
       if (scrollHint) scrollHint.style.opacity = String(Math.max(0, 1 - progress * 3.5));
 
       if (homeAbout) {
-        const aboutTop = homeAbout.getBoundingClientRect().top;
-        const revealStart = window.innerHeight * .98;
-        const revealEnd = window.innerHeight * .18;
-        const reveal = Math.min(1, Math.max(0, (revealStart - aboutTop) / (revealStart - revealEnd)));
-        const remaining = 1 - reveal;
-        homeAbout.style.setProperty('--about-reveal', reveal.toFixed(3));
-        homeAbout.style.setProperty('--about-portrait-x', `${(-90 * remaining).toFixed(2)}px`);
-        homeAbout.style.setProperty('--about-copy-x', `${(90 * remaining).toFixed(2)}px`);
-        homeAbout.style.setProperty('--about-mobile-y', `${(56 * remaining).toFixed(2)}px`);
+        if (window.innerWidth <= 820) {
+          if (homeAboutCopy) homeAboutCopy.style.removeProperty('transform');
+          aboutScrollSteps.forEach((step) => {
+            step.style.removeProperty('opacity');
+            step.style.removeProperty('transform');
+            step.style.removeProperty('filter');
+          });
+        } else {
+          const aboutRange = Math.max(1, homeAbout.offsetHeight - window.innerHeight);
+          const aboutProgress = clamp01((window.scrollY - homeAbout.offsetTop) / aboutRange);
+          if (homeAboutCopy) {
+            const copyShiftPhase = clamp01((aboutProgress - .6) / .3);
+            const maxCopyShift = Math.max(0, homeAboutCopy.scrollHeight - (window.innerHeight - 132));
+            const copyShift = maxCopyShift * (1 - Math.pow(1 - copyShiftPhase, 3));
+            homeAboutCopy.style.transform = `translate3d(0, ${(-copyShift).toFixed(2)}px, 0)`;
+          }
+          aboutScrollSteps.forEach((step, index) => {
+            const phase = clamp01((aboutProgress - (.03 + index * .09)) / .18);
+            const eased = 1 - Math.pow(1 - phase, 3);
+            const remaining = 1 - eased;
+            const fromX = index === 0 ? -128 : Math.max(54, 104 - index * 7);
+            const fromY = index === 0 ? 0 : Math.max(18, 40 - index * 2.5);
+            const scale = .975 + eased * .025;
+            step.style.opacity = eased.toFixed(3);
+            step.style.transform = `translate3d(${(fromX * remaining).toFixed(2)}px, ${(fromY * remaining).toFixed(2)}px, 0) scale(${scale.toFixed(3)})`;
+            step.style.filter = `blur(${(remaining * 9).toFixed(2)}px)`;
+          });
+        }
       }
     }
 
@@ -6214,6 +6341,14 @@
       });
 
       document.body.dataset.page = activeId;
+      if (activeId !== 'intro') {
+        if (homeAboutCopy) homeAboutCopy.style.removeProperty('transform');
+        aboutScrollSteps.forEach((step) => {
+          step.style.removeProperty('opacity');
+          step.style.removeProperty('transform');
+          step.style.removeProperty('filter');
+        });
+      }
       placeBackgroundLayers(activeId);
       if (options.scrollTop !== false) window.scrollTo({ top: 0, behavior: 'auto' });
       updateProgress();
@@ -6226,6 +6361,14 @@
     }, { threshold: .22 });
 
     revealItems.forEach((item) => revealObserver.observe(item));
+
+    const aboutStepObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('is-about-visible');
+      });
+    }, { threshold: .16, rootMargin: '0px 0px -10% 0px' });
+
+    aboutScrollSteps.forEach((step) => aboutStepObserver.observe(step));
 
     function setMobileNav(open) {
       if (!topNav || !navToggle) return;
