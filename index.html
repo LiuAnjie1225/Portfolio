@@ -335,71 +335,18 @@
       z-index: -2;
       overflow: hidden;
       pointer-events: none;
+      background: #242627 url("assets/hero-painted-background.jpg") center 48% / cover no-repeat;
       opacity: var(--hero-bg-opacity, 1);
       transform: translate3d(var(--hero-bg-x, 0px), 0, 0) scale(var(--hero-bg-scale, 1));
       transform-origin: center center;
       will-change: transform, opacity;
     }
 
-    .hero-art-drift {
-      position: absolute;
-      inset: -4%;
-      transform: translate3d(var(--hero-art-x, 0px), var(--hero-art-y, 0px), 0);
-      will-change: transform;
-    }
-
-    .hero-bg img {
+    .hero-bg canvas {
+      display: block;
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      object-position: center 48%;
-      filter: saturate(.96) contrast(1.02);
-      animation: heroArtBreath 22s ease-in-out infinite alternate;
-      transform-origin: center center;
-      will-change: transform;
-    }
-
-    .hero-ripple-surface,
-    .hero-ripple-layer {
-      position: absolute;
-      inset: 0;
       pointer-events: none;
-    }
-
-    .hero-ripple-surface {
-      background:
-        radial-gradient(circle 190px at var(--hero-pointer-x, 50%) var(--hero-pointer-y, 50%), rgba(255,255,255,.2), rgba(200,102,61,.08) 34%, rgba(70,87,67,.06) 52%, transparent 74%);
-      mix-blend-mode: soft-light;
-      opacity: var(--hero-pointer-opacity, 0);
-      transition: opacity .45s ease;
-    }
-
-    .hero-ripple {
-      position: absolute;
-      left: var(--ripple-x);
-      top: var(--ripple-y);
-      width: 36px;
-      height: 36px;
-      border: 1px solid rgba(255,255,255,.42);
-      border-radius: 50%;
-      box-shadow:
-        0 0 0 1px rgba(112,120,90,.14),
-        0 0 34px rgba(200,102,61,.16);
-      opacity: 0;
-      transform: translate(-50%, -50%) scale(.25);
-      animation: heroRipple 2.5s cubic-bezier(.2,.65,.25,1) forwards;
-    }
-
-    @keyframes heroArtBreath {
-      0% { transform: scale(1.035) translate3d(-.35%, -.2%, 0); }
-      50% { transform: scale(1.06) translate3d(.35%, .25%, 0); }
-      100% { transform: scale(1.045) translate3d(-.15%, .45%, 0); }
-    }
-
-    @keyframes heroRipple {
-      0% { opacity: 0; transform: translate(-50%, -50%) scale(.25); }
-      16% { opacity: .58; }
-      100% { opacity: 0; transform: translate(-50%, -50%) scale(8.5); }
     }
 
     .hero::before {
@@ -4833,13 +4780,7 @@
   <main id="top">
     <section class="hero" id="intro" data-section="intro">
       <div class="hero-sticky">
-        <div class="hero-bg" id="heroArtwork" aria-hidden="true">
-          <div class="hero-art-drift" id="heroArtDrift">
-            <img src="assets/hero-painted-background.jpg" alt="">
-          </div>
-          <div class="hero-ripple-surface"></div>
-          <div class="hero-ripple-layer" id="heroRippleLayer"></div>
-        </div>
+        <div class="hero-bg" id="heroRippleDistortion" aria-hidden="true"></div>
         <div class="hero-content">
           <div class="hero-name">Liu Anjie</div>
           <div class="portfolio-label">
@@ -5474,6 +5415,10 @@
   </div>
 
   <script>
+    import('./js/ripple-distortion.js').catch((error) => {
+      console.error('RippleDistortion failed to load:', error);
+    });
+
     import('./js/silk.js').catch((error) => {
       console.error('Silk failed to load:', error);
     });
@@ -5493,9 +5438,6 @@
     const cursorHalo = document.getElementById('cursorHalo');
     const heroSection = document.querySelector('.hero');
     const heroSticky = document.querySelector('.hero-sticky');
-    const heroArtwork = document.getElementById('heroArtwork');
-    const heroArtDrift = document.getElementById('heroArtDrift');
-    const heroRippleLayer = document.getElementById('heroRippleLayer');
     const heroName = document.querySelector('.hero-name');
     const portfolioLabel = document.querySelector('.portfolio-label');
     const heroDetails = document.querySelector('.hero-details');
@@ -5567,16 +5509,6 @@
       lastDraw: 0,
       ready: false
     };
-    const heroArt = {
-      x: 0,
-      y: 0,
-      targetX: 0,
-      targetY: 0,
-      lastRipple: 0,
-      lastRippleX: -999,
-      lastRippleY: -999
-    };
-
     aboutScrollSteps.forEach((step) => step.classList.add('about-scroll-step'));
 
     const zoomableImages = Array.from(document.querySelectorAll('main img')).filter((image) => {
@@ -6071,32 +6003,8 @@
         drawFlowField(time);
         flow.lastDraw = time;
       }
-      if (heroArtDrift) {
-        heroArt.x += (heroArt.targetX - heroArt.x) * .065;
-        heroArt.y += (heroArt.targetY - heroArt.y) * .065;
-        heroArtDrift.style.setProperty('--hero-art-x', `${heroArt.x.toFixed(2)}px`);
-        heroArtDrift.style.setProperty('--hero-art-y', `${heroArt.y.toFixed(2)}px`);
-      }
       updateCapabilityOrbits(time);
       requestAnimationFrame(animateFlowField);
-    }
-
-    function createHeroRipple(clientX, clientY, force = false) {
-      if (!heroSticky || !heroRippleLayer || reduceMotionQuery.matches) return;
-      const rect = heroSticky.getBoundingClientRect();
-      if (clientX < rect.left || clientX > rect.right || clientY < rect.top || clientY > rect.bottom) return;
-      const now = performance.now();
-      const distance = Math.hypot(clientX - heroArt.lastRippleX, clientY - heroArt.lastRippleY);
-      if (!force && (now - heroArt.lastRipple < 520 || distance < 72)) return;
-      heroArt.lastRipple = now;
-      heroArt.lastRippleX = clientX;
-      heroArt.lastRippleY = clientY;
-      const ripple = document.createElement('span');
-      ripple.className = 'hero-ripple';
-      ripple.style.setProperty('--ripple-x', `${((clientX - rect.left) / rect.width * 100).toFixed(2)}%`);
-      ripple.style.setProperty('--ripple-y', `${((clientY - rect.top) / rect.height * 100).toFixed(2)}%`);
-      heroRippleLayer.appendChild(ripple);
-      ripple.addEventListener('animationend', () => ripple.remove(), { once: true });
     }
 
     function updateProgress() {
@@ -6422,27 +6330,6 @@
     });
 
     if (finePointerQuery.matches && !reduceMotionQuery.matches) {
-      if (heroSticky && heroArtwork) {
-        heroSticky.addEventListener('pointermove', (event) => {
-          if (document.body.dataset.page !== 'intro') return;
-          const rect = heroSticky.getBoundingClientRect();
-          const px = clamp((event.clientX - rect.left) / rect.width, 0, 1);
-          const py = clamp((event.clientY - rect.top) / rect.height, 0, 1);
-          heroArt.targetX = (px - .5) * -20;
-          heroArt.targetY = (py - .5) * -14;
-          heroArtwork.style.setProperty('--hero-pointer-x', `${(px * 100).toFixed(2)}%`);
-          heroArtwork.style.setProperty('--hero-pointer-y', `${(py * 100).toFixed(2)}%`);
-          heroArtwork.style.setProperty('--hero-pointer-opacity', '1');
-          createHeroRipple(event.clientX, event.clientY);
-        }, { passive: true });
-
-        heroSticky.addEventListener('pointerleave', () => {
-          heroArt.targetX = 0;
-          heroArt.targetY = 0;
-          heroArtwork.style.setProperty('--hero-pointer-opacity', '0');
-        });
-      }
-
       projectShots.forEach((shot) => {
         shot.addEventListener('pointermove', (event) => {
           const rect = shot.getBoundingClientRect();
@@ -6457,12 +6344,6 @@
           shot.style.setProperty('--tilt-y', '0deg');
         });
       });
-    }
-
-    if (heroSticky) {
-      heroSticky.addEventListener('pointerdown', (event) => {
-        if (document.body.dataset.page === 'intro') createHeroRipple(event.clientX, event.clientY, true);
-      }, { passive: true });
     }
 
     zoomableImages.forEach((image) => {
