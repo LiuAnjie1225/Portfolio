@@ -14,6 +14,8 @@
       --charcoal: #252522;
       --burnt-orange: #c8663d;
       --olive: #70785a;
+      --olive-deep: #465743;
+      --terracotta-deep: #a95032;
       --sand: #d8c9b5;
       --white: var(--warm-ivory);
       --white-2: #fbf8f1;
@@ -3972,9 +3974,8 @@
 
     body {
       background:
-        radial-gradient(circle at 86% 12%, rgba(200,102,61,.1), transparent 27vw),
-        radial-gradient(circle at 7% 86%, rgba(112,120,90,.13), transparent 31vw),
-        linear-gradient(135deg, #fbf8f1 0%, #eee6db 48%, var(--warm-ivory) 100%);
+        linear-gradient(136deg, rgba(244,240,232,.96) 0 22%, rgba(112,120,90,.22) 54%, rgba(200,102,61,.2) 100%),
+        linear-gradient(24deg, #d8c9b5, #8b9675 54%, #c97850);
     }
 
     body::after {
@@ -4085,22 +4086,21 @@
 
     body[data-page="intro"] {
       background:
-        radial-gradient(circle at 18% 20%, rgba(216,201,181,.24), transparent 34vw),
-        radial-gradient(circle at 84% 78%, rgba(200,102,61,.13), transparent 32vw),
-        linear-gradient(135deg, #7c6753 0%, #5d4b3c 52%, #806b58 100%);
+        radial-gradient(ellipse at 84% 10%, rgba(215,126,61,.92), transparent 43%),
+        radial-gradient(ellipse at 16% 78%, rgba(104,128,98,.94), transparent 56%),
+        linear-gradient(142deg, #d9d7c0 0%, #9eaa90 30%, #52654d 64%, #ad5735 100%);
     }
 
     body[data-page="intro"] > .molten-field {
-      opacity: .88;
-      filter: saturate(.82) contrast(1.08) brightness(1.04);
-      mix-blend-mode: screen;
+      opacity: .42;
+      filter: saturate(1.18) contrast(1.18) brightness(.92);
+      mix-blend-mode: normal;
     }
 
     body[data-page="intro"] .hero-sticky::before {
       background:
-        radial-gradient(circle at 46% 44%, rgba(244,240,232,.12), transparent 34vw),
-        radial-gradient(circle at 80% 24%, rgba(200,102,61,.1), transparent 28vw),
-        linear-gradient(180deg, rgba(78,61,47,.08), rgba(57,43,33,.34));
+        linear-gradient(118deg, rgba(244,240,232,.08) 0 20%, rgba(70,87,67,.12) 54%, rgba(200,102,61,.1) 100%),
+        linear-gradient(180deg, rgba(45,55,43,.08), rgba(40,48,37,.28));
     }
 
     body[data-page="intro"] .topnav {
@@ -4118,9 +4118,9 @@
     body[data-page="intro"] #about,
     #about {
       background:
-        radial-gradient(circle at 20% 20%, rgba(216,201,181,.3), transparent 30vw),
-        radial-gradient(circle at 82% 76%, rgba(200,102,61,.09), transparent 34vw),
-        var(--warm-ivory);
+        radial-gradient(ellipse at 82% 18%, rgba(200,102,61,.28), transparent 42%),
+        radial-gradient(ellipse at 12% 82%, rgba(112,120,90,.44), transparent 52%),
+        linear-gradient(134deg, #f4f0e8 0 24%, #b7bea6 58%, #d18a67 100%);
     }
 
     .about-light-pillar {
@@ -4134,8 +4134,8 @@
 
     #about::after {
       background:
-        linear-gradient(90deg, rgba(244,240,232,.34), rgba(244,240,232,.04) 52%, rgba(216,201,181,.18)),
-        radial-gradient(circle at 52% 44%, transparent 0 34%, rgba(244,240,232,.16) 76%);
+        linear-gradient(90deg, rgba(244,240,232,.42), rgba(244,240,232,.05) 50%, rgba(200,102,61,.1)),
+        linear-gradient(150deg, transparent 0 48%, rgba(70,87,67,.1) 72%, rgba(200,102,61,.08));
     }
 
     #about .eyebrow {
@@ -4201,9 +4201,8 @@
 
     .story-chain .story-sticky {
       background:
-        radial-gradient(circle at 16% 72%, rgba(112,120,90,.13), transparent 30vw),
-        radial-gradient(circle at 86% 18%, rgba(200,102,61,.1), transparent 28vw),
-        var(--warm-ivory);
+        linear-gradient(132deg, rgba(244,240,232,.96) 0 18%, rgba(149,159,124,.38) 56%, rgba(200,102,61,.28) 100%),
+        linear-gradient(24deg, #f4f0e8, #899574 58%, #cb7953);
     }
 
     .story-chain .story-sticky::before,
@@ -4247,8 +4246,8 @@
 
     .story-brand .story-sticky {
       background:
-        radial-gradient(circle at 82% 26%, rgba(200,102,61,.16), transparent 30vw),
-        linear-gradient(145deg, #626950, #3b3f34 76%);
+        linear-gradient(132deg, rgba(98,105,80,.98) 0 42%, rgba(70,87,67,.96) 64%, rgba(169,80,50,.82) 100%),
+        linear-gradient(24deg, #394637, #70785a 58%, #c8663d);
     }
 
     .brand-layer {
@@ -4271,8 +4270,8 @@
       background:
         linear-gradient(90deg, rgba(112,120,90,.07) 1px, transparent 1px),
         linear-gradient(0deg, rgba(200,102,61,.045) 1px, transparent 1px),
-        radial-gradient(circle at 78% 28%, rgba(112,120,90,.12), transparent 28vw),
-        var(--charcoal);
+        linear-gradient(128deg, rgba(37,37,34,.92) 0 24%, rgba(70,87,67,.68) 64%, rgba(169,80,50,.54) 100%),
+        var(--olive-deep);
       background-size: 96px 96px, 96px 96px, auto, auto;
     }
 
@@ -4304,14 +4303,13 @@
     }
 
     .story-management {
-      background: var(--sand);
+      background: linear-gradient(132deg, #d8c9b5 0 18%, #93a07e 58%, #c97a54 100%);
     }
 
     .management-home-layout {
       background:
-        radial-gradient(circle at 50% 65%, rgba(244,240,232,.76), transparent 36%),
-        radial-gradient(circle at 84% 20%, rgba(200,102,61,.1), transparent 28vw),
-        linear-gradient(135deg, #ded1be, #f0e8dc);
+        linear-gradient(136deg, rgba(244,240,232,.74) 0 20%, rgba(112,120,90,.34) 58%, rgba(200,102,61,.24) 100%),
+        linear-gradient(28deg, #d8c9b5, #84916f 58%, #c8663d);
     }
 
     .management-core {
@@ -4336,8 +4334,7 @@
 
     .story-cases {
       background:
-        radial-gradient(circle at 82% 12%, rgba(200,102,61,.14), transparent 30vw),
-        radial-gradient(circle at 10% 90%, rgba(112,120,90,.12), transparent 34vw),
+        linear-gradient(132deg, rgba(37,37,34,.96) 0 24%, rgba(70,87,67,.72) 66%, rgba(169,80,50,.6) 100%),
         var(--charcoal);
     }
 
@@ -4413,8 +4410,7 @@
 
     .closing {
       background:
-        radial-gradient(circle at 78% 22%, rgba(200,102,61,.14), transparent 28vw),
-        radial-gradient(circle at 18% 84%, rgba(112,120,90,.14), transparent 30vw),
+        linear-gradient(132deg, rgba(37,37,34,.96) 0 22%, rgba(70,87,67,.72) 64%, rgba(169,80,50,.58) 100%),
         var(--charcoal);
       color: var(--warm-ivory);
     }
@@ -4454,11 +4450,11 @@
       }
 
       .story-brand .story-sticky {
-        background: linear-gradient(155deg, #626950, #3b3f34 76%);
+        background: linear-gradient(155deg, #626950 0 42%, #465743 70%, #a95032 100%);
       }
 
       .management-home-layout {
-        background: linear-gradient(155deg, #ded1be, #f0e8dc);
+        background: linear-gradient(155deg, #ded1be 0 22%, #93a07e 62%, #c97a54 100%);
       }
     }
 
@@ -5724,12 +5720,12 @@
           c /= 6.0;
           float intensity = max(c - 0.025, 0.0) * 1.42;
           float g = clamp(intensity, 0.0, 1.0);
-          vec3 deepSand = vec3(0.38, 0.30, 0.24);
-          vec3 warmSand = vec3(0.70, 0.59, 0.47);
+          vec3 deepOlive = vec3(0.275, 0.341, 0.263);
+          vec3 burntOrange = vec3(0.784, 0.40, 0.239);
           vec3 warmIvory = vec3(0.957, 0.941, 0.91);
-          vec3 color = mix(deepSand, warmSand, smoothstep(0.0, 0.52, g));
-          color = mix(color, warmIvory, smoothstep(0.52, 1.0, g));
-          float alpha = clamp(g + (hash(gl_FragCoord.xy + iTime) - 0.5) * 0.012, 0.0, 1.0) * 0.66;
+          vec3 color = mix(deepOlive, burntOrange, smoothstep(0.18, 0.76, g));
+          color = mix(color, warmIvory, smoothstep(0.86, 1.0, g));
+          float alpha = clamp(g + (hash(gl_FragCoord.xy + iTime) - 0.5) * 0.012, 0.0, 1.0) * 0.58;
           fragColor = vec4(color * alpha, alpha);
         }
       `;
