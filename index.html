@@ -2821,9 +2821,77 @@
     }
 
     .story-chain .story-sticky {
-      background:
-        linear-gradient(90deg, transparent 0 49.94%, rgba(23,25,26,.05) 49.94% 50.06%, transparent 50.06%),
-        #e7e9e8;
+      --chain-field-x: -4%;
+      --chain-field-y: 0px;
+      --chain-field-rotate: -4deg;
+      --chain-field-x-reverse: 3%;
+      --chain-field-y-reverse: 0px;
+      --chain-field-rotate-reverse: 3deg;
+      --chain-scan-x: -68%;
+      --chain-scan-opacity: .16;
+      background: #e7e9e8;
+    }
+
+    .story-chain .story-sticky::before {
+      content: "";
+      position: absolute;
+      inset: 44% -8% auto;
+      z-index: 0;
+      height: 1px;
+      background: repeating-linear-gradient(90deg, rgba(23,25,26,.22) 0 7px, transparent 7px 20px);
+      opacity: .34;
+      transform: translate3d(var(--chain-field-x), var(--chain-field-y), 0);
+      pointer-events: none;
+    }
+
+    .chain-atmosphere {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .chain-contour,
+    .chain-scan {
+      position: absolute;
+      display: block;
+      will-change: transform, opacity;
+    }
+
+    .chain-contour {
+      border: 1px solid rgba(23,25,26,.14);
+      border-radius: 50%;
+      box-shadow:
+        0 0 0 34px rgba(255,255,255,.11),
+        0 0 90px rgba(255,255,255,.26);
+    }
+
+    .chain-contour-a {
+      left: -24vw;
+      top: 29%;
+      width: 72vw;
+      height: 34vw;
+      transform: translate3d(var(--chain-field-x), var(--chain-field-y), 0) rotate(var(--chain-field-rotate));
+    }
+
+    .chain-contour-b {
+      right: -23vw;
+      top: 8%;
+      width: 66vw;
+      height: 45vw;
+      transform: translate3d(var(--chain-field-x-reverse), var(--chain-field-y-reverse), 0) rotate(var(--chain-field-rotate-reverse));
+    }
+
+    .chain-scan {
+      left: -26%;
+      top: -18%;
+      width: 48%;
+      height: 142%;
+      background: linear-gradient(90deg, transparent 0, rgba(255,255,255,.04) 22%, rgba(255,255,255,.7) 49%, rgba(23,25,26,.08) 51%, transparent 78%);
+      filter: blur(22px);
+      opacity: var(--chain-scan-opacity);
+      transform: translate3d(var(--chain-scan-x), 0, 0) rotate(9deg);
     }
 
     .story-chain .story-heading {
@@ -2834,8 +2902,8 @@
       position: absolute;
       left: var(--content-gutter);
       right: var(--content-gutter);
-      bottom: 118px;
-      z-index: 2;
+      bottom: clamp(178px, 21vh, 232px);
+      z-index: 3;
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 0;
@@ -2847,7 +2915,7 @@
       right: 0;
       top: 0;
       height: 1px;
-      overflow: hidden;
+      overflow: visible;
       background: rgba(23,25,26,.12);
     }
 
@@ -2859,14 +2927,32 @@
       will-change: width;
     }
 
+    .chain-line::after {
+      content: "";
+      position: absolute;
+      left: var(--chain-line, 0%);
+      top: 50%;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #17191a;
+      box-shadow: 0 0 0 7px rgba(23,25,26,.08);
+      opacity: var(--chain-progress-dot-opacity, 0);
+      transform: translate(-50%, -50%);
+      will-change: left, opacity;
+    }
+
     .chain-node {
       position: relative;
-      min-height: 246px;
+      min-height: 226px;
       padding: 34px clamp(20px, 3vw, 44px) 24px 0;
       border-right: 1px solid rgba(23,25,26,.1);
-      opacity: var(--node-opacity, .24);
-      transform: translate3d(0, var(--node-y, 42px), 0);
-      will-change: opacity, transform;
+      background: linear-gradient(180deg, rgb(255 255 255 / var(--node-surface, .03)), transparent 88%);
+      opacity: var(--node-opacity, .05);
+      filter: blur(var(--node-blur, 9px));
+      transform: translate3d(var(--node-x, 0), var(--node-y, 88px), 0) scale(var(--node-scale, .91));
+      transform-origin: 50% 0;
+      will-change: opacity, filter, transform;
     }
 
     .chain-node:last-child {
@@ -2886,7 +2972,8 @@
       height: 10px;
       border: 1px solid rgba(23,25,26,.42);
       border-radius: 50%;
-      background: #e7e9e8;
+      background: rgb(23 25 26 / var(--node-dot-opacity, .06));
+      transform: scale(var(--node-dot-scale, .65));
     }
 
     .chain-node + .chain-node::before {
@@ -3521,7 +3608,7 @@
         right: auto;
         bottom: auto;
         grid-template-columns: 1fr;
-        margin-top: 62px;
+        margin-top: 48px;
       }
 
       .chain-line {
@@ -3545,7 +3632,30 @@
         padding: 10px 0 42px 34px;
         border-right: 0;
         opacity: 1;
+        filter: none;
         transform: none;
+      }
+
+      .chain-atmosphere {
+        opacity: .66;
+      }
+
+      .chain-contour-a {
+        left: -72vw;
+        top: 35%;
+        width: 132vw;
+        height: 78vw;
+      }
+
+      .chain-contour-b {
+        right: -80vw;
+        top: 10%;
+        width: 142vw;
+        height: 96vw;
+      }
+
+      .chain-scan {
+        opacity: .1;
       }
 
       .chain-node::before,
@@ -3729,6 +3839,13 @@
       .management-axis,
       .management-ring {
         opacity: 1 !important;
+        filter: none !important;
+        transform: none !important;
+      }
+
+      .chain-atmosphere,
+      .chain-scan,
+      .story-chain .story-sticky::before {
         transform: none !important;
       }
 
@@ -4046,6 +4163,11 @@
 
     <section class="home-story story-chain" data-home-story="chain" aria-labelledby="home-chain-title">
       <div class="story-sticky">
+        <div class="chain-atmosphere" aria-hidden="true">
+          <i class="chain-contour chain-contour-a"></i>
+          <i class="chain-contour chain-contour-b"></i>
+          <i class="chain-scan"></i>
+        </div>
         <header class="story-heading">
           <div class="story-kicker"><span>01</span> 设计链路 / Design Chain</div>
           <h2 id="home-chain-title">从品牌定义，到产品落地，<br class="desktop-break">再到商业转化。</h2>
@@ -5213,11 +5335,30 @@
 
       if (chainStory) {
         const progress = getStoryProgress(chainStory);
-        chainStory.style.setProperty('--chain-line', `${(progress * 100).toFixed(2)}%`);
+        const fieldPhase = progress * progress * (3 - 2 * progress);
+        const linePhase = clamp01((progress - .025) / .63);
+        chainStory.style.setProperty('--chain-line', `${(linePhase * 100).toFixed(2)}%`);
+        chainStory.style.setProperty('--chain-progress-dot-opacity', progress > .025 && progress < .96 ? '.9' : '0');
+        chainStory.style.setProperty('--chain-field-x', `${(-4 + fieldPhase * 11).toFixed(2)}%`);
+        chainStory.style.setProperty('--chain-field-y', `${(-18 + fieldPhase * 48).toFixed(2)}px`);
+        chainStory.style.setProperty('--chain-field-rotate', `${(-4 + fieldPhase * 8).toFixed(2)}deg`);
+        chainStory.style.setProperty('--chain-field-x-reverse', `${(3 - fieldPhase * 8).toFixed(2)}%`);
+        chainStory.style.setProperty('--chain-field-y-reverse', `${(11 - fieldPhase * 29).toFixed(2)}px`);
+        chainStory.style.setProperty('--chain-field-rotate-reverse', `${(3 - fieldPhase * 6).toFixed(2)}deg`);
+        chainStory.style.setProperty('--chain-scan-x', `${(-68 + fieldPhase * 305).toFixed(2)}%`);
+        chainStory.style.setProperty('--chain-scan-opacity', (.16 + Math.sin(progress * Math.PI) * .24).toFixed(3));
         chainNodes.forEach((node, index) => {
-          const phase = clamp01((progress - index * .2) / .34);
-          node.style.setProperty('--node-opacity', (.2 + phase * .8).toFixed(3));
-          node.style.setProperty('--node-y', `${((1 - phase) * 42).toFixed(2)}px`);
+          const phase = clamp01((progress - .055 - index * .17) / .19);
+          const eased = phase * phase * (3 - 2 * phase);
+          const direction = index === 0 ? -1 : index === 2 ? 1 : 0;
+          node.style.setProperty('--node-opacity', (.04 + eased * .96).toFixed(3));
+          node.style.setProperty('--node-x', `${(direction * (1 - eased) * 58).toFixed(2)}px`);
+          node.style.setProperty('--node-y', `${((1 - eased) * 88).toFixed(2)}px`);
+          node.style.setProperty('--node-scale', (.91 + eased * .09).toFixed(3));
+          node.style.setProperty('--node-blur', `${((1 - eased) * 9).toFixed(2)}px`);
+          node.style.setProperty('--node-surface', (.03 + eased * .34).toFixed(3));
+          node.style.setProperty('--node-dot-opacity', (.06 + eased * .94).toFixed(3));
+          node.style.setProperty('--node-dot-scale', (.65 + eased * .35).toFixed(3));
         });
       }
 
