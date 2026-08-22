@@ -2245,15 +2245,31 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 10px;
-      color: var(--muted);
+      gap: 8px;
+      color: #f3b18b;
       font-family: var(--display);
-      font-size: 12px;
+      font-size: 10px;
       font-weight: 600;
+      letter-spacing: .08em;
       text-align: center;
       text-transform: uppercase;
       transform: translateX(-50%);
       z-index: 2;
+    }
+
+    .scroll-hint-arrow {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border: 1px solid rgba(255,208,179,.82);
+      border-radius: 50%;
+      background: rgba(200,102,61,.88);
+      box-shadow: 0 10px 30px rgba(91,43,25,.3), inset 0 1px 0 rgba(255,255,255,.24);
+      color: #fffaf2;
+      font-size: 19px;
+      line-height: 1;
+      animation: arrowDrift 2.1s ease-in-out infinite;
     }
 
     .scroll-hint::before {
@@ -4788,7 +4804,7 @@
           </div>
           <div class="hero-details">
             <nav class="action-row hero-gateway" aria-label="作品集模块入口">
-              <a class="action-link primary" href="#about">关于我</a>
+              <a class="action-link" href="#about">关于我</a>
               <a class="action-link" href="#capability">能力地图</a>
               <a class="action-link" href="#management">设计管理</a>
               <a class="action-link" href="#brand">品牌设计</a>
@@ -4796,6 +4812,10 @@
               <a class="action-link" href="#ecommerce">电商视觉</a>
             </nav>
           </div>
+        </div>
+        <div class="scroll-hint" aria-hidden="true">
+          <span>Scroll down</span>
+          <span class="scroll-hint-arrow">↓</span>
         </div>
       </div>
     </section>
