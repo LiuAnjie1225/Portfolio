@@ -5,7 +5,7 @@ import * as THREE from '../assets/vendor/three.module.min.js';
 const container = document.getElementById('aboutLightPillar');
 
 const options = {
-  topColor: '#ffffff',
+  topColor: '#fffaf2',
   bottomColor: '#c8663d',
   intensity: 1,
   rotationSpeed: 0.6,
@@ -165,7 +165,10 @@ function mountLightPillar(target, config) {
       float widthNorm = uPillarWidth / 3.0;
       col = tanh(col * uGlowAmount / widthNorm);
       col -= fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453) / 15.0 * uNoiseIntensity;
-      gl_FragColor = vec4(col * uIntensity, 1.0);
+      vec3 effect = clamp(col * uIntensity, 0.0, 1.0);
+      float energy = dot(effect, vec3(0.299, 0.587, 0.114));
+      float alpha = clamp(energy * 0.42, 0.0, 0.42);
+      gl_FragColor = vec4(effect, alpha);
     }
   `;
 
