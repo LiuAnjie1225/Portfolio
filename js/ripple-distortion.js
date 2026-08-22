@@ -444,7 +444,7 @@ const dispose = mountRippleDistortion(mount, {
   glint: 0,
   tint: '#ffffff',
   tintAmount: 0.1,
-  grayscale: true,
+  grayscale: false,
   highlightColor: '#ffffff',
   trigger: 'hover',
   clickStrength: 2,
