@@ -3324,7 +3324,7 @@
       position: absolute;
       left: 50%;
       top: 50%;
-      width: min(700px, 54vw);
+      width: min(620px, 48vw);
       margin: 0;
       padding: 8px;
       border: 1px solid rgba(23,25,26,.12);
@@ -5386,14 +5386,17 @@
 
       if (commerceStory) {
         const progress = getStoryProgress(commerceStory);
+        const spreadX = Math.min(118, window.innerWidth * .085);
+        const spreadY = Math.min(116, window.innerHeight * .13);
         commerceSheets.forEach((sheet, index) => {
           const start = index * .2;
           const enter = clamp01((progress - start) / .28);
           const exit = clamp01((progress - start - .38) / .28);
-          const x = (index - 1) * 34;
-          const y = (1 - enter) * 160 - index * 24 - exit * 150;
-          const scale = .88 + enter * .12 - exit * .035;
-          const rotate = (index - 1) * 2.4 * (1 - enter * .7);
+          const x = (index - 1) * spreadX;
+          const laneY = (index - 1) * spreadY;
+          const y = (1 - enter) * 178 + laneY - exit * 132;
+          const scale = .84 + enter * .12 - exit * .025;
+          const rotate = (index - 1) * 3.2 * (1 - enter * .45);
           const opacity = Math.max(0, enter * (1 - exit * .35));
           sheet.style.transform = `translate3d(calc(-50% + ${x}px), calc(-50% + ${y.toFixed(2)}px), 0) rotate(${rotate.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
           sheet.style.opacity = opacity.toFixed(3);
