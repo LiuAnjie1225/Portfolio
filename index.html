@@ -337,9 +337,7 @@
       pointer-events: none;
       background: #242627 url("assets/hero-painted-background.jpg") center 48% / cover no-repeat;
       opacity: var(--hero-bg-opacity, 1);
-      transform: translate3d(var(--hero-bg-x, 0px), 0, 0) scale(var(--hero-bg-scale, 1));
-      transform-origin: center center;
-      will-change: transform, opacity;
+      will-change: opacity;
     }
 
     .hero-bg canvas {
@@ -2586,7 +2584,10 @@
       }
 
       .portfolio-label span {
-        max-width: calc(100vw - (var(--side-pad) * 2));
+        max-width: none;
+        transform: scale(var(--portfolio-scale, 1));
+        transform-origin: center center;
+        will-change: transform;
       }
 
       .portfolio-bilingual {
@@ -6036,12 +6037,8 @@
       if (hero) {
         const heroDistance = Math.max(1, hero.offsetHeight * .82);
         const heroProgress = Math.min(1, Math.max(0, window.scrollY / heroDistance));
-        const x = heroProgress * Math.min(520, window.innerWidth * .36);
         const opacity = Math.max(0, 1 - heroProgress * 1.18);
-        const scale = 1 + heroProgress * .035;
-        document.documentElement.style.setProperty('--hero-bg-x', `${x}px`);
         document.documentElement.style.setProperty('--hero-bg-opacity', opacity.toFixed(3));
-        document.documentElement.style.setProperty('--hero-bg-scale', scale.toFixed(3));
       }
       updateHomeScroll();
       updateHomeStory();
@@ -6162,6 +6159,7 @@
       if (reduceMotionQuery.matches) {
         portfolioLabel.style.setProperty('--portfolio-word', '0');
         portfolioLabel.style.removeProperty('--portfolio-font-size');
+        portfolioLabel.style.setProperty('--portfolio-scale', '1');
         portfolioLabel.style.setProperty('--portfolio-opacity', '1');
         if (heroDetails) {
           heroDetails.style.setProperty('--hero-details-opacity', '1');
@@ -6187,7 +6185,13 @@
         : Math.min(148, Math.max(72, window.innerWidth * .09));
       const displaySize = baseSize * (1 + zoomProgress * (maxScale - 1));
 
-      portfolioLabel.style.setProperty('--portfolio-font-size', `${displaySize.toFixed(2)}px`);
+      if (window.innerWidth <= 600) {
+        portfolioLabel.style.removeProperty('--portfolio-font-size');
+        portfolioLabel.style.setProperty('--portfolio-scale', (displaySize / baseSize).toFixed(4));
+      } else {
+        portfolioLabel.style.setProperty('--portfolio-scale', '1');
+        portfolioLabel.style.setProperty('--portfolio-font-size', `${displaySize.toFixed(2)}px`);
+      }
       portfolioLabel.style.setProperty('--portfolio-opacity', (1 - fadeProgress).toFixed(3));
       if (heroDetails) {
         heroDetails.style.setProperty('--hero-details-opacity', (1 - detailProgress).toFixed(3));
