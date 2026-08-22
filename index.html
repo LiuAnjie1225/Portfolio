@@ -3743,6 +3743,199 @@
       .commerce-sheet:nth-child(2) { transform: translate(-50%, -50%) scale(.94) !important; }
       .commerce-sheet:nth-child(3) { transform: translate(-50%, calc(-50% + 54px)) scale(.98) !important; }
     }
+
+    body.image-viewer-open {
+      overflow: hidden;
+    }
+
+    main img.is-zoomable {
+      cursor: zoom-in;
+    }
+
+    .image-viewer {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      color: rgba(255,255,255,.92);
+      font-family: var(--display);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity .34s ease, visibility 0s linear .34s;
+    }
+
+    .image-viewer.is-open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transition-delay: 0s;
+    }
+
+    .image-viewer-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(13, 14, 15, .9);
+      backdrop-filter: blur(18px) saturate(.72);
+      -webkit-backdrop-filter: blur(18px) saturate(.72);
+    }
+
+    .image-viewer-topbar {
+      position: absolute;
+      inset: 0 0 auto;
+      min-height: 76px;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      z-index: 4;
+    }
+
+    .image-viewer-meta {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .image-viewer-counter {
+      flex: 0 0 auto;
+      color: rgba(255,255,255,.45);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .image-viewer-title {
+      min-width: 0;
+      max-width: min(48vw, 680px);
+      overflow: hidden;
+      color: rgba(255,255,255,.82);
+      font-size: 12px;
+      font-weight: 600;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .image-viewer-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .image-viewer button {
+      appearance: none;
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 50%;
+      background: rgba(255,255,255,.07);
+      color: #fff;
+      font: 500 22px/1 var(--display);
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: background .24s ease, border-color .24s ease, transform .24s ease;
+    }
+
+    .image-viewer button:hover,
+    .image-viewer button:focus-visible {
+      border-color: rgba(255,255,255,.42);
+      background: rgba(255,255,255,.15);
+      outline: none;
+    }
+
+    .image-viewer button:active {
+      transform: scale(.94);
+    }
+
+    .image-viewer-reset {
+      font-size: 10px !important;
+      font-weight: 700 !important;
+    }
+
+    .image-viewer-stage {
+      position: absolute;
+      inset: 76px 72px 48px;
+      z-index: 2;
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    .image-viewer-flight {
+      position: fixed;
+      overflow: hidden;
+      background: rgba(255,255,255,.035);
+      box-shadow: 0 30px 90px rgba(0,0,0,.34);
+      transform-origin: 50% 50%;
+      will-change: transform, opacity;
+    }
+
+    .image-viewer-image {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+      user-select: none;
+      -webkit-user-drag: none;
+      transform-origin: 50% 50%;
+      will-change: transform;
+    }
+
+    .image-viewer.is-loading .image-viewer-image {
+      opacity: 0;
+    }
+
+    .image-viewer.is-zoomed .image-viewer-stage {
+      cursor: grab;
+    }
+
+    .image-viewer.is-dragging .image-viewer-stage {
+      cursor: grabbing;
+    }
+
+    .image-viewer-nav {
+      position: absolute;
+      top: 50%;
+      z-index: 4;
+      transform: translateY(-50%);
+      font-size: 30px !important;
+    }
+
+    .image-viewer-nav:active {
+      transform: translateY(-50%) scale(.94) !important;
+    }
+
+    .image-viewer-prev { left: 18px; }
+    .image-viewer-next { right: 18px; }
+
+    @media (max-width: 700px) {
+      .image-viewer-topbar {
+        min-height: 72px;
+        padding: 14px 16px;
+        gap: 10px;
+      }
+
+      .image-viewer-meta { gap: 10px; }
+      .image-viewer-title { max-width: 34vw; font-size: 10px; }
+      .image-viewer-controls { gap: 6px; }
+      .image-viewer button { width: 38px; height: 38px; }
+      .image-viewer-stage { inset: 72px 12px 72px; }
+      .image-viewer-nav { top: auto; bottom: 16px; transform: none; }
+      .image-viewer-nav:active { transform: scale(.94) !important; }
+      .image-viewer-prev { left: calc(50% - 50px); }
+      .image-viewer-next { right: calc(50% - 50px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .image-viewer,
+      .image-viewer-flight,
+      .image-viewer-image {
+        transition: none !important;
+      }
+    }
   </style>
 </head>
 <body class="page-router">
@@ -4380,6 +4573,29 @@
     </section>
   </main>
 
+  <div class="image-viewer" id="imageViewer" role="dialog" aria-modal="true" aria-label="作品大图预览" aria-hidden="true">
+    <div class="image-viewer-backdrop" data-viewer-close></div>
+    <div class="image-viewer-topbar">
+      <div class="image-viewer-meta">
+        <span class="image-viewer-counter" id="imageViewerCounter">01 / 01</span>
+        <strong class="image-viewer-title" id="imageViewerTitle"></strong>
+      </div>
+      <div class="image-viewer-controls">
+        <button type="button" data-viewer-action="zoom-out" aria-label="缩小图片" title="缩小">−</button>
+        <button type="button" class="image-viewer-reset" data-viewer-action="reset" aria-label="还原图片尺寸" title="还原尺寸">1:1</button>
+        <button type="button" data-viewer-action="zoom-in" aria-label="放大图片" title="放大">+</button>
+        <button type="button" data-viewer-close aria-label="关闭大图" title="关闭">×</button>
+      </div>
+    </div>
+    <button type="button" class="image-viewer-nav image-viewer-prev" data-viewer-action="previous" aria-label="上一张图片" title="上一张">‹</button>
+    <div class="image-viewer-stage" id="imageViewerStage">
+      <div class="image-viewer-flight" id="imageViewerFlight">
+        <img class="image-viewer-image" id="imageViewerImage" alt="" draggable="false">
+      </div>
+    </div>
+    <button type="button" class="image-viewer-nav image-viewer-next" data-viewer-action="next" aria-label="下一张图片" title="下一张">›</button>
+  </div>
+
   <script>
     const progressBar = document.getElementById('progressBar');
     const topNav = document.querySelector('.topnav');
@@ -4412,6 +4628,12 @@
     const commerceSheets = Array.from(document.querySelectorAll('.commerce-sheet'));
     const managementStory = document.querySelector('[data-home-story="management"]');
     const managementAxes = Array.from(document.querySelectorAll('.management-axis'));
+    const imageViewer = document.getElementById('imageViewer');
+    const imageViewerStage = document.getElementById('imageViewerStage');
+    const imageViewerFlight = document.getElementById('imageViewerFlight');
+    const imageViewerImage = document.getElementById('imageViewerImage');
+    const imageViewerCounter = document.getElementById('imageViewerCounter');
+    const imageViewerTitle = document.getElementById('imageViewerTitle');
     const capabilityStage = document.querySelector('.capability-stage');
     const orbitNodes = Array.from(document.querySelectorAll('.capability-node:not(.center)'));
     const reduceMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -4450,6 +4672,253 @@
       lastDraw: 0,
       ready: false
     };
+
+    const zoomableImages = Array.from(document.querySelectorAll('main img')).filter((image) => {
+      return image.getAttribute('alt')?.trim() && !image.closest('[data-no-viewer]');
+    });
+    const imageViewerItems = [];
+    const imageViewerItemBySource = new Map();
+    const imageViewerPointers = new Map();
+    const imageViewerState = {
+      index: 0,
+      scale: 1,
+      x: 0,
+      y: 0,
+      sourceImage: null,
+      lastFocused: null,
+      drag: null,
+      pinch: null,
+      closing: false
+    };
+
+    zoomableImages.forEach((image) => {
+      const source = new URL(image.getAttribute('src'), document.baseURI).href;
+      let item = imageViewerItemBySource.get(source);
+      if (!item) {
+        item = {
+          source,
+          title: image.getAttribute('alt').trim(),
+          images: []
+        };
+        imageViewerItemBySource.set(source, item);
+        imageViewerItems.push(item);
+      }
+      item.images.push(image);
+      image.dataset.viewerIndex = String(imageViewerItems.indexOf(item));
+      image.classList.add('is-zoomable');
+      if (!image.closest('a, button')) {
+        image.tabIndex = 0;
+        image.setAttribute('role', 'button');
+        image.setAttribute('aria-label', `查看大图：${image.getAttribute('alt').trim()}`);
+      }
+    });
+
+    function clamp(value, min, max) {
+      return Math.min(max, Math.max(min, value));
+    }
+
+    function viewerIsOpen() {
+      return imageViewer?.classList.contains('is-open');
+    }
+
+    function layoutImageViewer() {
+      if (!imageViewerImage?.naturalWidth || !imageViewerFlight) return;
+      const mobile = window.innerWidth <= 700;
+      const availableWidth = window.innerWidth - (mobile ? 28 : 160);
+      const availableHeight = window.innerHeight - (mobile ? 156 : 128);
+      const fit = Math.min(
+        availableWidth / imageViewerImage.naturalWidth,
+        availableHeight / imageViewerImage.naturalHeight,
+        1
+      );
+      const width = Math.max(1, Math.round(imageViewerImage.naturalWidth * fit));
+      const height = Math.max(1, Math.round(imageViewerImage.naturalHeight * fit));
+      imageViewerFlight.style.width = `${width}px`;
+      imageViewerFlight.style.height = `${height}px`;
+      imageViewerFlight.style.left = `${Math.round((window.innerWidth - width) / 2)}px`;
+      imageViewerFlight.style.top = `${Math.round((window.innerHeight - height) / 2)}px`;
+    }
+
+    function clampImageViewerPan() {
+      if (!imageViewerFlight) return;
+      const width = parseFloat(imageViewerFlight.style.width) || 0;
+      const height = parseFloat(imageViewerFlight.style.height) || 0;
+      const mobile = window.innerWidth <= 700;
+      const visibleWidth = window.innerWidth - 24;
+      const visibleHeight = window.innerHeight - (mobile ? 144 : 92);
+      const maxX = Math.max(0, (width * imageViewerState.scale - visibleWidth) / 2);
+      const maxY = Math.max(0, (height * imageViewerState.scale - visibleHeight) / 2);
+      imageViewerState.x = clamp(imageViewerState.x, -maxX, maxX);
+      imageViewerState.y = clamp(imageViewerState.y, -maxY, maxY);
+    }
+
+    function applyImageViewerTransform(animate = false) {
+      if (!imageViewerImage || !imageViewer) return;
+      clampImageViewerPan();
+      imageViewerImage.style.transition = animate
+        ? 'transform .42s cubic-bezier(.16, 1, .3, 1)'
+        : 'none';
+      imageViewerImage.style.transform = `translate3d(${imageViewerState.x}px, ${imageViewerState.y}px, 0) scale(${imageViewerState.scale})`;
+      imageViewer.classList.toggle('is-zoomed', imageViewerState.scale > 1.001);
+    }
+
+    function resetImageViewerZoom(animate = true) {
+      imageViewerState.scale = 1;
+      imageViewerState.x = 0;
+      imageViewerState.y = 0;
+      applyImageViewerTransform(animate);
+    }
+
+    function zoomImageViewer(nextScale, clientX = window.innerWidth / 2, clientY = window.innerHeight / 2, animate = true) {
+      if (!imageViewerFlight || !viewerIsOpen()) return;
+      const previousScale = imageViewerState.scale;
+      const scale = clamp(nextScale, 1, 5);
+      const rect = imageViewerFlight.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const localX = (clientX - centerX - imageViewerState.x) / previousScale;
+      const localY = (clientY - centerY - imageViewerState.y) / previousScale;
+      imageViewerState.x = clientX - centerX - localX * scale;
+      imageViewerState.y = clientY - centerY - localY * scale;
+      imageViewerState.scale = scale;
+      if (scale === 1) {
+        imageViewerState.x = 0;
+        imageViewerState.y = 0;
+      }
+      applyImageViewerTransform(animate);
+    }
+
+    function waitForViewerImage() {
+      if (imageViewerImage.complete && imageViewerImage.naturalWidth) return Promise.resolve();
+      return new Promise((resolve, reject) => {
+        imageViewerImage.addEventListener('load', resolve, { once: true });
+        imageViewerImage.addEventListener('error', reject, { once: true });
+      });
+    }
+
+    async function showImageViewerItem(index, options = {}) {
+      if (!imageViewerItems.length || !imageViewerImage) return;
+      const direction = options.direction || 0;
+      const nextIndex = (index + imageViewerItems.length) % imageViewerItems.length;
+      const item = imageViewerItems[nextIndex];
+      if (direction && !reduceMotionQuery.matches) {
+        await imageViewerImage.animate([
+          { opacity: 1, transform: imageViewerImage.style.transform || 'none' },
+          { opacity: 0, transform: `translate3d(${-direction * 28}px, ${imageViewerState.y}px, 0) scale(${imageViewerState.scale * .98})` }
+        ], { duration: 170, easing: 'ease-in', fill: 'forwards' }).finished.catch(() => {});
+      }
+
+      imageViewerState.index = nextIndex;
+      imageViewerState.sourceImage = options.sourceImage || null;
+      imageViewer.classList.add('is-loading');
+      imageViewerCounter.textContent = `${String(nextIndex + 1).padStart(2, '0')} / ${String(imageViewerItems.length).padStart(2, '0')}`;
+      imageViewerTitle.textContent = item.title;
+      imageViewerImage.alt = item.title;
+      imageViewerImage.src = item.source;
+
+      try {
+        await waitForViewerImage();
+        if (imageViewerImage.decode) await imageViewerImage.decode().catch(() => {});
+      } catch (_) {
+        imageViewer.classList.remove('is-loading');
+        return;
+      }
+
+      layoutImageViewer();
+      resetImageViewerZoom(false);
+      imageViewer.classList.remove('is-loading');
+
+      if (options.sourceImage && !reduceMotionQuery.matches) {
+        const sourceRect = options.sourceImage.getBoundingClientRect();
+        const targetRect = imageViewerFlight.getBoundingClientRect();
+        const sourceX = sourceRect.left + sourceRect.width / 2;
+        const sourceY = sourceRect.top + sourceRect.height / 2;
+        const targetX = targetRect.left + targetRect.width / 2;
+        const targetY = targetRect.top + targetRect.height / 2;
+        const scaleX = Math.max(.01, sourceRect.width / targetRect.width);
+        const scaleY = Math.max(.01, sourceRect.height / targetRect.height);
+        const flight = imageViewerFlight.animate([
+          {
+            opacity: .35,
+            transform: `translate3d(${sourceX - targetX}px, ${sourceY - targetY}px, 0) scale(${scaleX}, ${scaleY})`
+          },
+          { opacity: 1, transform: 'translate3d(0, 0, 0) scale(1)' }
+        ], {
+          duration: 620,
+          easing: 'cubic-bezier(.16, 1, .3, 1)',
+          fill: 'both'
+        });
+        await flight.finished.catch(() => {});
+        flight.cancel();
+      } else if (direction && !reduceMotionQuery.matches) {
+        const entrance = imageViewerImage.animate([
+          { opacity: 0, transform: `translate3d(${direction * 34}px, 0, 0) scale(.98)` },
+          { opacity: 1, transform: 'translate3d(0, 0, 0) scale(1)' }
+        ], { duration: 420, easing: 'cubic-bezier(.16, 1, .3, 1)', fill: 'both' });
+        await entrance.finished.catch(() => {});
+        entrance.cancel();
+      }
+    }
+
+    async function openImageViewer(sourceImage) {
+      if (!imageViewer || !sourceImage || viewerIsOpen()) return;
+      const index = Number(sourceImage.dataset.viewerIndex);
+      if (!Number.isFinite(index)) return;
+      imageViewerState.lastFocused = document.activeElement;
+      imageViewerState.closing = false;
+      document.body.classList.add('image-viewer-open');
+      imageViewer.classList.add('is-open');
+      imageViewer.setAttribute('aria-hidden', 'false');
+      await showImageViewerItem(index, { sourceImage });
+      imageViewer.querySelector('button[data-viewer-close]')?.focus({ preventScroll: true });
+    }
+
+    async function closeImageViewer() {
+      if (!viewerIsOpen() || imageViewerState.closing) return;
+      imageViewerState.closing = true;
+      resetImageViewerZoom(false);
+      const sourceImage = imageViewerState.sourceImage;
+      const sourceRect = sourceImage?.isConnected ? sourceImage.getBoundingClientRect() : null;
+      const canReturn = sourceRect && sourceRect.bottom > 0 && sourceRect.top < window.innerHeight;
+      const animations = [];
+
+      if (!reduceMotionQuery.matches) {
+        animations.push(imageViewer.animate(
+          [{ opacity: 1 }, { opacity: 0 }],
+          { duration: 320, easing: 'ease-out', fill: 'forwards' }
+        ).finished.catch(() => {}));
+        if (canReturn) {
+          const targetRect = imageViewerFlight.getBoundingClientRect();
+          const sourceX = sourceRect.left + sourceRect.width / 2;
+          const sourceY = sourceRect.top + sourceRect.height / 2;
+          const targetX = targetRect.left + targetRect.width / 2;
+          const targetY = targetRect.top + targetRect.height / 2;
+          animations.push(imageViewerFlight.animate([
+            { opacity: 1, transform: 'translate3d(0, 0, 0) scale(1)' },
+            {
+              opacity: .2,
+              transform: `translate3d(${sourceX - targetX}px, ${sourceY - targetY}px, 0) scale(${sourceRect.width / targetRect.width}, ${sourceRect.height / targetRect.height})`
+            }
+          ], { duration: 360, easing: 'cubic-bezier(.7, 0, .84, 0)', fill: 'forwards' }).finished.catch(() => {}));
+        }
+      }
+
+      await Promise.all(animations);
+      imageViewer.getAnimations().forEach((animation) => animation.cancel());
+      imageViewerFlight.getAnimations().forEach((animation) => animation.cancel());
+      imageViewer.classList.remove('is-open', 'is-loading', 'is-zoomed', 'is-dragging');
+      imageViewer.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('image-viewer-open');
+      imageViewerImage.removeAttribute('src');
+      imageViewerState.closing = false;
+      imageViewerPointers.clear();
+      imageViewerState.lastFocused?.focus?.({ preventScroll: true });
+    }
+
+    function navigateImageViewer(direction) {
+      if (!viewerIsOpen()) return;
+      showImageViewerItem(imageViewerState.index + direction, { direction });
+    }
 
     function compileMoltenShader(gl, type, source) {
       const shader = gl.createShader(type);
@@ -4984,6 +5453,134 @@
       });
     }
 
+    zoomableImages.forEach((image) => {
+      image.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        openImageViewer(image);
+      });
+      image.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        event.stopPropagation();
+        openImageViewer(image);
+      });
+      image.addEventListener('dragstart', (event) => event.preventDefault());
+    });
+
+    if (imageViewer) {
+      imageViewer.addEventListener('click', (event) => {
+        const closeControl = event.target.closest('[data-viewer-close]');
+        if (closeControl) {
+          closeImageViewer();
+          return;
+        }
+        const actionControl = event.target.closest('[data-viewer-action]');
+        if (!actionControl) return;
+        const action = actionControl.dataset.viewerAction;
+        if (action === 'zoom-in') zoomImageViewer(imageViewerState.scale * 1.45);
+        if (action === 'zoom-out') zoomImageViewer(imageViewerState.scale / 1.45);
+        if (action === 'reset') resetImageViewerZoom();
+        if (action === 'previous') navigateImageViewer(-1);
+        if (action === 'next') navigateImageViewer(1);
+      });
+    }
+
+    if (imageViewerStage) {
+      imageViewerStage.addEventListener('wheel', (event) => {
+        if (!viewerIsOpen()) return;
+        event.preventDefault();
+        const factor = Math.exp(-event.deltaY * .0018);
+        zoomImageViewer(imageViewerState.scale * factor, event.clientX, event.clientY, false);
+      }, { passive: false });
+
+      imageViewerStage.addEventListener('dblclick', (event) => {
+        event.preventDefault();
+        if (imageViewerState.scale > 1.05) {
+          resetImageViewerZoom();
+        } else {
+          zoomImageViewer(2.25, event.clientX, event.clientY);
+        }
+      });
+
+      imageViewerStage.addEventListener('pointerdown', (event) => {
+        if (event.pointerType === 'mouse' && event.button !== 0) return;
+        imageViewerStage.setPointerCapture?.(event.pointerId);
+        imageViewerPointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+        imageViewer.classList.add('is-dragging');
+        if (imageViewerPointers.size === 1) {
+          imageViewerState.drag = {
+            pointerId: event.pointerId,
+            startX: event.clientX,
+            startY: event.clientY,
+            imageX: imageViewerState.x,
+            imageY: imageViewerState.y
+          };
+        } else if (imageViewerPointers.size === 2) {
+          const points = Array.from(imageViewerPointers.values());
+          imageViewerState.pinch = {
+            distance: Math.hypot(points[1].x - points[0].x, points[1].y - points[0].y),
+            midpointX: (points[0].x + points[1].x) / 2,
+            midpointY: (points[0].y + points[1].y) / 2,
+            scale: imageViewerState.scale,
+            imageX: imageViewerState.x,
+            imageY: imageViewerState.y
+          };
+        }
+      });
+
+      imageViewerStage.addEventListener('pointermove', (event) => {
+        if (!imageViewerPointers.has(event.pointerId)) return;
+        event.preventDefault();
+        imageViewerPointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+
+        if (imageViewerPointers.size >= 2 && imageViewerState.pinch) {
+          const points = Array.from(imageViewerPointers.values()).slice(0, 2);
+          const distance = Math.hypot(points[1].x - points[0].x, points[1].y - points[0].y);
+          const midpointX = (points[0].x + points[1].x) / 2;
+          const midpointY = (points[0].y + points[1].y) / 2;
+          const pinch = imageViewerState.pinch;
+          const nextScale = clamp(pinch.scale * distance / Math.max(1, pinch.distance), 1, 5);
+          const rect = imageViewerFlight.getBoundingClientRect();
+          const centerX = rect.left + rect.width / 2;
+          const centerY = rect.top + rect.height / 2;
+          const localX = (pinch.midpointX - centerX - pinch.imageX) / pinch.scale;
+          const localY = (pinch.midpointY - centerY - pinch.imageY) / pinch.scale;
+          imageViewerState.scale = nextScale;
+          imageViewerState.x = midpointX - centerX - localX * nextScale;
+          imageViewerState.y = midpointY - centerY - localY * nextScale;
+          applyImageViewerTransform(false);
+          return;
+        }
+
+        const drag = imageViewerState.drag;
+        if (!drag || drag.pointerId !== event.pointerId || imageViewerState.scale <= 1) return;
+        imageViewerState.x = drag.imageX + event.clientX - drag.startX;
+        imageViewerState.y = drag.imageY + event.clientY - drag.startY;
+        applyImageViewerTransform(false);
+      });
+
+      const releaseViewerPointer = (event) => {
+        imageViewerPointers.delete(event.pointerId);
+        imageViewerState.pinch = null;
+        if (imageViewerPointers.size === 1) {
+          const [pointerId, point] = imageViewerPointers.entries().next().value;
+          imageViewerState.drag = {
+            pointerId,
+            startX: point.x,
+            startY: point.y,
+            imageX: imageViewerState.x,
+            imageY: imageViewerState.y
+          };
+        } else if (!imageViewerPointers.size) {
+          imageViewerState.drag = null;
+          imageViewer.classList.remove('is-dragging');
+        }
+      };
+      imageViewerStage.addEventListener('pointerup', releaseViewerPointer);
+      imageViewerStage.addEventListener('pointercancel', releaseViewerPointer);
+    }
+
     const moltenReady = initMoltenField();
     resizeFlowField();
     updateCapabilityOrbits(0);
@@ -4995,6 +5592,26 @@
     }
 
     window.addEventListener('keydown', (event) => {
+      if (viewerIsOpen()) {
+        if (event.key === 'Escape') closeImageViewer();
+        if (event.key === 'ArrowLeft') navigateImageViewer(-1);
+        if (event.key === 'ArrowRight') navigateImageViewer(1);
+        if (event.key === '+' || event.key === '=') zoomImageViewer(imageViewerState.scale * 1.45);
+        if (event.key === '-') zoomImageViewer(imageViewerState.scale / 1.45);
+        if (event.key === '0') resetImageViewerZoom();
+        if (event.key === 'Tab') {
+          const controls = Array.from(imageViewer.querySelectorAll('button:not([disabled])'));
+          const current = controls.indexOf(document.activeElement);
+          if (event.shiftKey && current <= 0) {
+            event.preventDefault();
+            controls[controls.length - 1]?.focus();
+          } else if (!event.shiftKey && current === controls.length - 1) {
+            event.preventDefault();
+            controls[0]?.focus();
+          }
+        }
+        return;
+      }
       if (event.key === 'Escape') setMobileNav(false);
     });
 
@@ -5013,6 +5630,10 @@
       updateCapabilityOrbits(flow.lastDraw || 0);
       updateHomeScroll();
       updateHomeStory();
+      if (viewerIsOpen()) {
+        layoutImageViewer();
+        resetImageViewerZoom(false);
+      }
     }, { passive: true });
 
     const initialSection = new URLSearchParams(window.location.search).get('section');
