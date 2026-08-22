@@ -7,13 +7,13 @@ const container = document.getElementById('aboutLightPillar');
 const options = {
   topColor: '#ffffff',
   bottomColor: '#5c5c5c',
-  intensity: 1,
-  rotationSpeed: 0.3,
-  glowAmount: 0.005,
+  intensity: 1.12,
+  rotationSpeed: 0.7,
+  glowAmount: 0.0075,
   pillarWidth: 3,
   pillarHeight: 0.4,
   noiseIntensity: 0.5,
-  pillarRotation: 0,
+  pillarRotation: 30,
   interactive: false,
   mixBlendMode: 'normal',
   quality: 'medium'
