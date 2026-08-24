@@ -6,7 +6,7 @@ import {
   Triangle,
   Texture,
   RenderTarget
-} from '../assets/vendor/ogl-1.0.11.mjs';
+} from '../assets/vendor/ogl-1.0.11.js';
 
 // Source: https://reactbits.dev/r/RippleDistortion-JS-CSS.json
 // React Bits RippleDistortion, adapted from React to this build-free static site.
