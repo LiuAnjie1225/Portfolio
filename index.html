@@ -844,6 +844,41 @@
       max-width: 760px;
     }
 
+    #about .intro-block {
+      gap: 20px;
+    }
+
+    #about .intro-block h2 {
+      max-width: 690px;
+      font-size: clamp(48px, 4.65vw, 76px);
+      line-height: .98;
+      text-wrap: balance;
+    }
+
+    #about .quote-line {
+      max-width: 680px;
+      font-size: clamp(17px, 1.22vw, 21px);
+      line-height: 1.68;
+    }
+
+    #about .tag-cloud {
+      gap: 9px;
+    }
+
+    #about .tag-cloud span {
+      min-height: 36px;
+      padding-inline: 15px;
+      font-size: 11px;
+    }
+
+    #about .action-row {
+      margin-top: 4px;
+    }
+
+    #about .action-link {
+      min-width: 138px;
+    }
+
     .role-chip {
       display: inline-flex;
       align-items: center;
@@ -2993,8 +3028,29 @@
       background: #e7e9e8;
     }
 
+    .chain-floating-lines {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      mix-blend-mode: screen;
+      opacity: .84;
+    }
+
+    .chain-floating-lines canvas {
+      display: block;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .chain-floating-lines.is-webgl-fallback {
+      background:
+        radial-gradient(circle at 24% 68%, rgba(81,97,57,.28), transparent 38%),
+        radial-gradient(circle at 76% 34%, rgba(184,101,27,.22), transparent 42%);
+    }
+
     .story-chain .story-sticky::before {
-      content: "";
+      content: none;
       position: absolute;
       inset: 44% -8% auto;
       z-index: 0;
@@ -3063,11 +3119,57 @@
       position: absolute;
       left: var(--content-gutter);
       right: var(--content-gutter);
-      bottom: clamp(178px, 21vh, 232px);
+      top: calc(clamp(500px, 80vh, 740px) + clamp(0px, calc(22vh - 198px), 80px));
+      bottom: auto;
       z-index: 3;
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 0;
+    }
+
+    .chain-media-grid {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: calc(100% + 30px);
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      pointer-events: none;
+    }
+
+    .chain-media-card {
+      position: relative;
+      width: clamp(160px, min(20.8vw, calc((100vh - 500px) * .75)), 300px);
+      aspect-ratio: 3 / 4;
+      margin: 0 0 0 clamp(20px, 3vw, 44px);
+      overflow: hidden;
+      border: 1px solid rgba(247,243,234,.3);
+      border-radius: 8px;
+      background: rgba(244,240,232,.72);
+      box-shadow: 0 18px 44px rgba(15,20,14,.2);
+      clip-path: inset(var(--media-clip, 42%) 0 0 0 round 8px);
+      opacity: var(--media-opacity, .03);
+      filter: blur(var(--media-blur, 8px));
+      transform: translate3d(var(--media-x, 0), var(--media-y, 54px), 0)
+        scale(var(--media-scale, .9));
+      transform-origin: 50% 100%;
+      will-change: clip-path, opacity, filter, transform;
+      pointer-events: auto;
+    }
+
+    .chain-media-card img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .chain-media-card.is-placeholder:nth-child(2) {
+      background: linear-gradient(145deg, rgba(244,240,232,.82), rgba(216,201,181,.64));
+    }
+
+    .chain-media-card.is-placeholder:nth-child(3) {
+      background: linear-gradient(145deg, rgba(216,201,181,.72), rgba(112,120,90,.72));
     }
 
     .chain-line {
@@ -3105,8 +3207,8 @@
 
     .chain-node {
       position: relative;
-      min-height: 226px;
-      padding: 34px clamp(20px, 3vw, 44px) 24px 0;
+      min-height: 154px;
+      padding: 26px clamp(20px, 3vw, 44px) 18px;
       border-right: 1px solid rgba(23,25,26,.1);
       background: linear-gradient(180deg, rgb(255 255 255 / var(--node-surface, .03)), transparent 88%);
       opacity: var(--node-opacity, .05);
@@ -3120,14 +3222,10 @@
       border-right: 0;
     }
 
-    .chain-node + .chain-node {
-      padding-left: clamp(20px, 3vw, 44px);
-    }
-
     .chain-node::before {
       content: "";
       position: absolute;
-      left: 0;
+      left: clamp(20px, 3vw, 44px);
       top: -5px;
       width: 10px;
       height: 10px;
@@ -3135,10 +3233,6 @@
       border-radius: 50%;
       background: rgb(23 25 26 / var(--node-dot-opacity, .06));
       transform: scale(var(--node-dot-scale, .65));
-    }
-
-    .chain-node + .chain-node::before {
-      left: clamp(20px, 3vw, 44px);
     }
 
     .chain-index,
@@ -3153,18 +3247,18 @@
 
     .chain-node strong {
       display: block;
-      margin-top: 38px;
+      margin-top: 24px;
       font-size: 27px;
       line-height: 1.2;
     }
 
     .chain-node small {
-      margin-top: 10px;
+      margin-top: 8px;
     }
 
     .chain-node p {
       max-width: 240px;
-      margin-top: 34px;
+      margin-top: 18px;
       color: rgba(23,25,26,.62);
       font-size: 15px;
     }
@@ -3731,6 +3825,11 @@
     }
 
     @media (max-width: 820px) {
+      .chain-floating-lines {
+        opacity: .7;
+        pointer-events: none;
+      }
+
       .home-story,
       .story-chain,
       .story-brand,
@@ -3767,9 +3866,39 @@
         position: relative;
         left: auto;
         right: auto;
+        top: auto;
         bottom: auto;
         grid-template-columns: 1fr;
         margin-top: 48px;
+      }
+
+      .chain-media-grid {
+        position: relative;
+        left: auto;
+        right: auto;
+        bottom: auto;
+        grid-column: 1;
+        grid-template-columns: repeat(3, min(76vw, 300px));
+        gap: 12px;
+        width: calc(100% - 34px);
+        margin: 0 0 34px 34px;
+        padding: 0 0 8px;
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x proximity;
+        scrollbar-width: none;
+      }
+
+      .chain-media-grid::-webkit-scrollbar { display: none; }
+
+      .chain-media-card {
+        width: 100%;
+        margin: 0;
+        clip-path: inset(0 round 8px);
+        opacity: 1;
+        filter: none;
+        transform: none;
+        scroll-snap-align: start;
       }
 
       .chain-line {
@@ -3992,6 +4121,18 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
+      .chain-floating-lines {
+        opacity: .58;
+        pointer-events: none;
+      }
+
+      .chain-media-card {
+        clip-path: inset(0 round 8px);
+        opacity: 1;
+        filter: none;
+        transform: none;
+      }
+
       .chain-node,
       .brand-layer,
       .product-story-track,
@@ -4257,14 +4398,27 @@
     }
 
     .story-chain .story-sticky {
-      background:
-        linear-gradient(132deg, rgba(244,240,232,.96) 0 18%, rgba(149,159,124,.38) 56%, rgba(200,102,61,.28) 100%),
-        linear-gradient(24deg, #f4f0e8, #899574 58%, #cb7953);
+      background: linear-gradient(24deg, #263026, #3f4b37 58%, #596047);
+      color: #f7f3ea;
+    }
+
+    .story-chain .story-kicker,
+    .story-chain .story-heading > p {
+      color: rgba(247,243,234,.7);
+    }
+
+    .story-chain .chain-index,
+    .story-chain .chain-node small {
+      color: rgba(247,243,234,.58);
+    }
+
+    .story-chain .chain-node p {
+      color: rgba(247,243,234,.72);
     }
 
     .story-chain .story-sticky::before,
     .chain-line {
-      background-color: rgba(112,120,90,.2);
+      background-color: rgba(247,243,234,.2);
     }
 
     .chain-contour {
@@ -4282,8 +4436,8 @@
     }
 
     .chain-node {
-      border-color: rgba(112,120,90,.18);
-      background: linear-gradient(180deg, rgb(251 248 241 / var(--node-surface, .03)), transparent 88%);
+      border-color: rgba(247,243,234,.18);
+      background: linear-gradient(180deg, rgb(247 243 234 / var(--node-surface, .03)), transparent 88%);
     }
 
     .chain-node::before {
@@ -4494,6 +4648,32 @@
     }
 
     @media (max-width: 820px) {
+      #about .intro-block {
+        gap: 17px;
+      }
+
+      #about .intro-block h2 {
+        max-width: 560px;
+        font-size: clamp(36px, 10.8vw, 48px);
+        line-height: 1.02;
+      }
+
+      #about .quote-line {
+        max-width: 620px;
+        font-size: 16px;
+        line-height: 1.65;
+      }
+
+      #about .action-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      #about .action-link {
+        min-width: 0;
+        padding-inline: 12px;
+      }
+
       body[data-page="intro"] #about {
         min-height: auto;
         padding: var(--section-top) var(--side-pad) var(--section-bottom);
@@ -4833,45 +5013,18 @@
         <div class="about-copy">
           <div class="intro-block">
             <div class="eyebrow">关于我 / About</div>
-            <div class="role-chip">Liu Anjie / 全链条设计负责人</div>
-            <h2>建筑学背景，转向产品、品牌与跨境电商设计管理。</h2>
-            <p class="quote-line">我负责视觉、产品、电商内容与团队协作，擅长把分散输出整理成一套清晰的设计系统。</p>
+            <div class="role-chip">Liu Anjie / Design Manager</div>
+            <h2>连接产品、品牌与商业。</h2>
+            <p class="quote-line">负责跨境品牌的产品设计、品牌视觉与电商内容，并通过系统化流程推动团队协作。</p>
             <div class="tag-cloud" role="group" aria-label="Core capability tags">
               <span>品牌策略 / Brand</span>
               <span>产品设计 / Product ID</span>
-              <span>材质与 CMF</span>
-              <span>包装设计 / Package</span>
-              <span>Amazon 页面</span>
-              <span>Premium A+</span>
-              <span>社媒视频 / Social</span>
+              <span>电商视觉 / E-commerce</span>
               <span>设计管理 / Management</span>
             </div>
             <div class="action-row">
-              <a class="action-link primary" href="#brand">查看完整链路案例</a>
-              <a class="action-link" href="#product">查看产品设计</a>
-              <a class="action-link" href="#ecommerce">查看电商视觉</a>
-              <a class="action-link" href="#management">查看管理模型</a>
-            </div>
-          </div>
-          <div class="summary-panel">
-            <b>我连接的设计链路</b>
-            <div class="summary-grid">
-              <div class="summary-cell">
-                <small>品牌到产品 / Brand to Product</small>
-                <p>统一语言、定位与 CMF。</p>
-              </div>
-              <div class="summary-cell">
-                <small>产品到转化 / Product to Conversion</small>
-                <p>把卖点转成页面视觉。</p>
-              </div>
-              <div class="summary-cell">
-                <small>内容到渠道 / Content to Channel</small>
-                <p>整合页面、图文与视频资产。</p>
-              </div>
-              <div class="summary-cell">
-                <small>管理到系统 / Manager to System</small>
-                <p>用流程提升协作效率。</p>
-              </div>
+              <a class="action-link primary" href="#brand">查看代表案例</a>
+              <a class="action-link" href="#capability">查看能力地图</a>
             </div>
           </div>
         </div>
@@ -4880,17 +5033,24 @@
 
     <section class="home-story story-chain" data-home-story="chain" aria-labelledby="home-chain-title">
       <div class="story-sticky">
-        <div class="chain-atmosphere" aria-hidden="true">
-          <i class="chain-contour chain-contour-a"></i>
-          <i class="chain-contour chain-contour-b"></i>
-          <i class="chain-scan"></i>
-        </div>
+        <div class="chain-floating-lines" id="chainFloatingLines" aria-hidden="true"></div>
         <header class="story-heading">
           <div class="story-kicker"><span>01</span> 设计链路 / Design Chain</div>
-          <h2 id="home-chain-title">从品牌定义，到产品落地，<br class="desktop-break">再到商业转化。</h2>
-          <p>我不把设计拆成孤立任务，而是让每一次判断在下一环节继续发挥作用。</p>
+          <h2 id="home-chain-title">跨境设计全链路</h2>
+          <p>从品牌定义，到产品落地，再到商业转化。</p>
         </header>
         <div class="chain-system" aria-label="品牌、产品与电商转化设计链路">
+          <div class="chain-media-grid" aria-label="设计链路项目缩略图">
+            <figure class="chain-media-card">
+              <img src="./images/home/brand-visual-model.webp" alt="RENA CHRIS 绿色刮痧产品模特视觉" loading="lazy" decoding="async">
+            </figure>
+            <figure class="chain-media-card">
+              <img src="./images/home/product-cmf-massager.webp" alt="粉色双头金属按摩产品设计与 CMF 展示" loading="lazy" decoding="async">
+            </figure>
+            <figure class="chain-media-card">
+              <img src="./images/home/ecommerce-visual-benefits.webp" alt="RENA CHRIS 刮痧产品电商卖点视觉" loading="lazy" decoding="async">
+            </figure>
+          </div>
           <div class="chain-line" aria-hidden="true"><i></i></div>
           <article class="chain-node" data-chain-index="0">
             <span class="chain-index">01</span>
@@ -5444,6 +5604,10 @@
       console.error('Silk failed to load:', error);
     });
 
+    import('./js/floating-lines.js').catch((error) => {
+      console.error('FloatingLines failed to load:', error);
+    });
+
     const progressBar = document.getElementById('progressBar');
     const topNav = document.querySelector('.topnav');
     const navToggle = document.querySelector('.nav-toggle');
@@ -5472,11 +5636,11 @@
       document.querySelector('#about .intro-block h2'),
       document.querySelector('#about .quote-line'),
       document.querySelector('#about .tag-cloud'),
-      document.querySelector('#about .intro-block > .action-row'),
-      document.querySelector('#about .summary-panel')
+      document.querySelector('#about .intro-block > .action-row')
     ].filter(Boolean);
     const homeStorySections = Array.from(document.querySelectorAll('[data-home-story]'));
     const chainStory = document.querySelector('[data-home-story="chain"]');
+    const chainMediaCards = Array.from(document.querySelectorAll('.chain-media-card'));
     const chainNodes = Array.from(document.querySelectorAll('.chain-node'));
     const brandStory = document.querySelector('[data-home-story="brand"]');
     const productStory = document.querySelector('[data-home-story="product"]');
@@ -6080,6 +6244,17 @@
         chainStory.style.setProperty('--chain-field-rotate-reverse', `${(3 - fieldPhase * 6).toFixed(2)}deg`);
         chainStory.style.setProperty('--chain-scan-x', `${(-68 + fieldPhase * 305).toFixed(2)}%`);
         chainStory.style.setProperty('--chain-scan-opacity', (.16 + Math.sin(progress * Math.PI) * .24).toFixed(3));
+        chainMediaCards.forEach((card, index) => {
+          const phase = clamp01((progress - .03 - index * .17) / .18);
+          const eased = phase * phase * (3 - 2 * phase);
+          const direction = index === 0 ? -1 : index === 2 ? 1 : 0;
+          card.style.setProperty('--media-opacity', (.03 + eased * .97).toFixed(3));
+          card.style.setProperty('--media-x', `${(direction * (1 - eased) * 34).toFixed(2)}px`);
+          card.style.setProperty('--media-y', `${((1 - eased) * 54).toFixed(2)}px`);
+          card.style.setProperty('--media-scale', (.9 + eased * .1).toFixed(3));
+          card.style.setProperty('--media-blur', `${((1 - eased) * 8).toFixed(2)}px`);
+          card.style.setProperty('--media-clip', `${((1 - eased) * 42).toFixed(2)}%`);
+        });
         chainNodes.forEach((node, index) => {
           const phase = clamp01((progress - .055 - index * .17) / .19);
           const eased = phase * phase * (3 - 2 * phase);
