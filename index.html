@@ -848,11 +848,41 @@
       gap: 20px;
     }
 
-    #about .intro-block h2 {
-      max-width: 690px;
-      font-size: clamp(48px, 4.65vw, 76px);
-      line-height: .98;
-      text-wrap: balance;
+    #about .about-title-stack {
+      display: grid;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    #about .about-title-primary,
+    #about .about-title-secondary,
+    #about .about-title-tertiary {
+      width: max-content;
+      max-width: 100%;
+      margin: 0;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+
+    #about .about-title-primary {
+      font-size: 68px;
+      font-weight: 700;
+      line-height: .96;
+    }
+
+    #about .about-title-secondary {
+      color: rgba(245,245,242,.92);
+      font-family: var(--display);
+      font-size: 38px;
+      font-weight: 600;
+      line-height: 1.08;
+    }
+
+    #about .about-title-tertiary {
+      color: rgba(245,245,242,.74);
+      font-size: 22px;
+      font-weight: 500;
+      line-height: 1.35;
     }
 
     #about .quote-line {
@@ -862,13 +892,54 @@
     }
 
     #about .tag-cloud {
-      gap: 9px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      width: min(100%, 520px);
     }
 
     #about .tag-cloud span {
+      justify-content: flex-start;
+      width: 100%;
       min-height: 36px;
       padding-inline: 15px;
       font-size: 11px;
+    }
+
+    .about-scroll-hint {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: #f3b18b;
+      font-family: var(--display);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-align: center;
+      text-transform: uppercase;
+      width: max-content;
+      margin-inline: auto;
+      z-index: 4;
+    }
+
+    .about-scroll-hint-arrow {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border: 1px solid rgba(255,208,179,.82);
+      border-radius: 50%;
+      background: rgba(200,102,61,.92);
+      box-shadow: 0 10px 30px rgba(91,43,25,.3), inset 0 1px 0 rgba(255,255,255,.24);
+      color: #fffaf2;
+      font-size: 19px;
+      line-height: 1;
+      animation: arrowDrift 2.1s ease-in-out infinite;
     }
 
     #about .action-row {
@@ -2421,6 +2492,18 @@
         gap: 42px;
       }
 
+      #about .about-title-primary {
+        font-size: 56px;
+      }
+
+      #about .about-title-secondary {
+        font-size: 34px;
+      }
+
+      #about .about-title-tertiary {
+        font-size: 20px;
+      }
+
       .impact-strip,
       .capability-legend {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -3045,8 +3128,9 @@
 
     .chain-floating-lines.is-webgl-fallback {
       background:
-        radial-gradient(circle at 24% 68%, rgba(81,97,57,.28), transparent 38%),
-        radial-gradient(circle at 76% 34%, rgba(184,101,27,.22), transparent 42%);
+        radial-gradient(circle at 24% 68%, rgba(137,149,116,.24), transparent 38%),
+        radial-gradient(circle at 52% 46%, rgba(244,240,232,.12), transparent 34%),
+        radial-gradient(circle at 76% 34%, rgba(203,121,83,.18), transparent 42%);
     }
 
     .story-chain .story-sticky::before {
@@ -3153,6 +3237,13 @@
       transform: translate3d(var(--media-x, 0), var(--media-y, 54px), 0)
         scale(var(--media-scale, .9));
       transform-origin: 50% 100%;
+      translate: 0 0;
+      scale: 1;
+      transition:
+        translate .36s cubic-bezier(.22, 1, .36, 1),
+        scale .36s cubic-bezier(.22, 1, .36, 1),
+        border-color .3s ease,
+        box-shadow .36s ease;
       will-change: clip-path, opacity, filter, transform;
       pointer-events: auto;
     }
@@ -3162,6 +3253,20 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transition: filter .36s ease;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .chain-media-card:hover {
+        translate: 0 -8px;
+        scale: 1.025;
+        border-color: rgba(247,243,234,.54);
+        box-shadow: 0 26px 58px rgba(15,20,14,.3);
+      }
+
+      .chain-media-card:hover img {
+        filter: saturate(1.04) contrast(1.02);
+      }
     }
 
     .chain-media-card.is-placeholder:nth-child(2) {
@@ -4131,6 +4236,12 @@
         opacity: 1;
         filter: none;
         transform: none;
+        transition: none;
+      }
+
+      .chain-media-card:hover {
+        translate: 0 0;
+        scale: 1;
       }
 
       .chain-node,
@@ -4398,7 +4509,7 @@
     }
 
     .story-chain .story-sticky {
-      background: linear-gradient(24deg, #263026, #3f4b37 58%, #596047);
+      background: #120f17;
       color: #f7f3ea;
     }
 
@@ -4652,10 +4763,16 @@
         gap: 17px;
       }
 
-      #about .intro-block h2 {
-        max-width: 560px;
-        font-size: clamp(36px, 10.8vw, 48px);
-        line-height: 1.02;
+      #about .about-title-primary {
+        font-size: 50px;
+      }
+
+      #about .about-title-secondary {
+        font-size: 34px;
+      }
+
+      #about .about-title-tertiary {
+        font-size: 20px;
       }
 
       #about .quote-line {
@@ -4677,6 +4794,16 @@
       body[data-page="intro"] #about {
         min-height: auto;
         padding: var(--section-top) var(--side-pad) var(--section-bottom);
+      }
+
+      .about-scroll-hint {
+        position: relative;
+        left: auto;
+        right: auto;
+        bottom: auto;
+        grid-column: 1 / -1;
+        margin: 18px auto 0;
+        transform: none;
       }
 
       body[data-page="intro"] #about > .about-home-layout {
@@ -4727,6 +4854,30 @@
 
       .management-home-layout {
         background: linear-gradient(155deg, #ded1be 0 22%, #93a07e 62%, #c97a54 100%);
+      }
+    }
+
+    @media (max-width: 520px) {
+      #about .about-title-primary {
+        font-size: 42px;
+      }
+
+      #about .about-title-secondary {
+        font-size: 29px;
+      }
+
+      #about .about-title-tertiary {
+        font-size: 17px;
+      }
+
+      #about .tag-cloud {
+        gap: 8px;
+      }
+
+      #about .tag-cloud span {
+        min-height: 34px;
+        padding-inline: 11px;
+        font-size: 10px;
       }
     }
 
@@ -5013,20 +5164,27 @@
         <div class="about-copy">
           <div class="intro-block">
             <div class="eyebrow">关于我 / About</div>
-            <div class="role-chip">Liu Anjie / Design Manager</div>
-            <h2>连接产品、品牌与商业。</h2>
+            <div class="about-title-stack">
+              <h2 class="about-title-primary">刘安杰</h2>
+              <p class="about-title-secondary">“全栈”设计师</p>
+              <p class="about-title-tertiary">连接品牌、产品与商业。</p>
+            </div>
             <p class="quote-line">负责跨境品牌的产品设计、品牌视觉与电商内容，并通过系统化流程推动团队协作。</p>
             <div class="tag-cloud" role="group" aria-label="Core capability tags">
+              <span>设计管理 / Management</span>
               <span>品牌策略 / Brand</span>
               <span>产品设计 / Product ID</span>
               <span>电商视觉 / E-commerce</span>
-              <span>设计管理 / Management</span>
             </div>
             <div class="action-row">
               <a class="action-link primary" href="#brand">查看代表案例</a>
               <a class="action-link" href="#capability">查看能力地图</a>
             </div>
           </div>
+        </div>
+        <div class="about-scroll-hint" aria-hidden="true">
+          <span>Scroll down</span>
+          <span class="about-scroll-hint-arrow">↓</span>
         </div>
       </div>
     </section>
@@ -5632,11 +5790,13 @@
     const aboutScrollSteps = [
       document.querySelector('#about .about-portrait'),
       document.querySelector('#about .eyebrow'),
-      document.querySelector('#about .role-chip'),
-      document.querySelector('#about .intro-block h2'),
+      document.querySelector('#about .about-title-primary'),
+      document.querySelector('#about .about-title-secondary'),
+      document.querySelector('#about .about-title-tertiary'),
       document.querySelector('#about .quote-line'),
       document.querySelector('#about .tag-cloud'),
-      document.querySelector('#about .intro-block > .action-row')
+      document.querySelector('#about .intro-block > .action-row'),
+      document.querySelector('#about .about-scroll-hint')
     ].filter(Boolean);
     const homeStorySections = Array.from(document.querySelectorAll('[data-home-story]'));
     const chainStory = document.querySelector('[data-home-story="chain"]');

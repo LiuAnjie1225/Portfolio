@@ -18,12 +18,12 @@ const options = {
   enabledWaves: ['middle', 'top', 'bottom'],
   lineCount: [10, 15, 20],
   lineDistance: 56.5,
-  bendRadius: 8.5,
+  bendRadius: 5,
   bendStrength: -0.5,
   interactive: true,
   parallax: true,
-  animationSpeed: 1.7,
-  linesGradient: ['#516139', '#b8651b'],
+  animationSpeed: 1,
+  linesGradient: ['#899574', '#f4f0e8', '#cb7953'],
   mouseDamping: 0.05,
   parallaxStrength: 0.2
 };
